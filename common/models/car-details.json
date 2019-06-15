@@ -1,0 +1,53 @@
+{
+  "name": "carDetails",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "registrationNo": {
+      "type": "string",
+      "required": true
+    },
+    "color": {
+      "type": "string",
+      "required": true
+    },
+    "makeOfCar": {
+      "type": "string",
+      "required": true
+    },
+    "modelOfCar": {
+      "type": "string",
+      "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "required": true
+    },
+    "parkingTime": {
+      "type": "date",
+      "required": true
+    },
+    "unparkingTime": {
+      "type": "date",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "appUser": {
+      "type": "belongsTo",
+      "model": "appUser",
+      "foreignKey": "appUserId"
+    },
+    "parkingDetails": {
+      "type": "belongsTo",
+      "model": "parkingDetails",
+      "foreignKey": "parkingDetailId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

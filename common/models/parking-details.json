@@ -1,0 +1,45 @@
+{
+  "name": "parkingDetails",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "slotNumber": {
+      "type": "number",
+      "required": true
+    },
+    "floorNumber": {
+      "type": "number",
+      "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "appUser": {
+      "type": "belongsTo",
+      "model": "appUser",
+      "foreignKey": "appUserId",
+      "options": {
+        "nestRemoting": true
+      }
+    },
+    "carDetails": {
+      "type": "belongsTo",
+      "model": "carDetails",
+      "foreignKey": "carDetailId"
+    },
+    "floorDetails": {
+      "type": "belongsTo",
+      "model": "floorDetails",
+      "foreignKey": "floorDetailId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

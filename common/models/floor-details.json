@@ -1,0 +1,29 @@
+{
+  "name": "floorDetails",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "floorNumber": {
+      "type": "number",
+      "required": true
+    },
+    "hasFreeSlots": {
+      "type": "boolean",
+      "required": true
+    },
+    "maxSlots": {
+      "type": "number",
+      "required": true
+    },
+    "numberOfFilledSlots": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

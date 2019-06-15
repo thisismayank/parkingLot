@@ -1,0 +1,53 @@
+{
+  "name": "appUser",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "userCode": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "dob": {
+      "type": "date"
+    },
+    "gender": {
+      "type": "number"
+    },
+    "isActive": {
+      "type": "boolean"
+    },
+    "isRoot": {
+      "type": "boolean"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "parkingDetails": {
+      "type": "hasMany",
+      "model": "parkingDetails",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

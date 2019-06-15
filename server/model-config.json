@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "db"
+  },
+  "AccessToken": {
+    "dataSource": "db",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "db",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "db",
+    "public": false
+  },
+  "carDetails": {
+    "dataSource": "db",
+    "public": true
+  },
+  "appUser": {
+    "dataSource": "db",
+    "public": true
+  },
+  "roles": {
+    "dataSource": "db",
+    "public": true
+  },
+  "userRoleMapping": {
+    "dataSource": "db",
+    "public": true
+  },
+  "floorDetails": {
+    "dataSource": "db",
+    "public": true
+  },
+  "parkingDetails": {
+    "dataSource": "db",
+    "public": true
+  }
+}
