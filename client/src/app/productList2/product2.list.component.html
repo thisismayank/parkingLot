@@ -1,0 +1,18 @@
+<h1>Hello</h1>
+<table class="table table-hover col-lg-10">
+    <thead>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Description</th>
+
+    </thead>
+    <tr *ngFor="let x of products">
+        <td>{{x.id}} </td>
+        <td>{{x.name}} </td>
+        <td>{{x.price}} </td>
+        <td>{{x.quantity}} </td>
+        <td>{{x.description}} </td>
+    </tr>
+</table>
