@@ -48,7 +48,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
@@ -56,7 +56,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           }
         ],
@@ -300,7 +300,7 @@ module.exports = function(Appuser) {
         description: 'API to disable any user'
       });
 
-      Appuser.fetchAllUsers = function (callback) {
+      Appuser.fetchAllUsers = function (roleOfLoggedInUser, callback) {
         const promise = new Promise(function (resolve, reject) {
           if(roleOfLoggedInUser !== 'ADMIN') {
             return resolve({success: false, message: 'Only an admin user is authorized'});
@@ -327,7 +327,16 @@ module.exports = function(Appuser) {
       };
     
       Appuser.remoteMethod('fetchAllUsers', {
-        accepts: [],
+        accepts: [
+          {
+            arg: 'roleOfLoggedInUser',
+            type: 'string',
+            required: true,
+            http: {
+              source: 'query'
+            }
+          }
+        ],
         returns: {
           arg: 'data',
           type: 'object',
