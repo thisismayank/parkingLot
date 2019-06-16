@@ -39,6 +39,7 @@ export class login
                     appUserId: data.data.id
                 };
 
+                localStorage.removeItem('token');
                 localStorage.setItem('token', JSON.stringify(token));
                 if(data.data.role === 'ADMIN') {
                     this.router.navigate(['/users']);

@@ -78,7 +78,9 @@ module.exports = function(Appuser) {
           let userData;
           Appuser.findOne({
             where: {
-              userCode: userCode
+              userCode: userCode,
+              email:email,
+              isActive:true
             }
           })
             .then(function (user) {
@@ -144,7 +146,7 @@ module.exports = function(Appuser) {
                 type: 'string',
                 required: true,
                 http: {
-                  source: 'form'
+                  source: 'query'
                 }
               },
               {
@@ -152,39 +154,39 @@ module.exports = function(Appuser) {
                 type: 'string',
                 required: true,
                 http: {
-                  source: 'form'
+                  source: 'query'
                 }
               },
-              {
-                arg: 'email',
-                type: 'string',
-                required: true,
-                http: {
-                  source: 'form'
-                }
-              },  
           {
             arg: 'userCode',
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
+          {
+            arg: 'email',
+            type: 'string',
+            required: true,
+            http: {
+              source: 'query'
+            }
+          },  
           {
             arg: 'password',
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
             arg: 'dob',
-            type: 'date',
+            type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
@@ -192,7 +194,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
@@ -200,7 +202,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
@@ -208,7 +210,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
         ],
