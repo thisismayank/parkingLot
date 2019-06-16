@@ -32,6 +32,13 @@ export class users
         return this.http.post(this.baseUrl + query + query1, '');
     }
 
+    public register(firstName, lastName, userCode, email, password, dob, gender, role, roleOfLoggedInUser)
+    {
+        const path = `/appUsers/register`;
+        const query = `?firstName=${firstName}&lastName=${lastName}&userCode=${userCode}&email=${email}&password=${password}&dob=${dob}&gender=${gender}&role=${role}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
+        return this.http.post(this.baseUrl + path + query, '');
+    }
+
     // public deletePlayer(id)
     // {
     //     return this.http.delete(this.baseUrl + '/' + id);

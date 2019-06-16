@@ -34,8 +34,17 @@ export class login
             let data = JSON.parse(response['_body']);
 
             if(data.success === true) {
-                localStorage.setItem('role', data.data.role);
-                this.router.navigate(['/users']);
+                let token = {
+                    role: data.data.role,
+                    appUserId: data.data.id
+                };
+
+                localStorage.setItem('token', JSON.stringify(token));
+                if(data.data.role === 'ADMIN') {
+                    this.router.navigate(['/users']);
+                } else {
+                    this.router.navigate(['/parkCar']);
+                }
             } 
         });
     }

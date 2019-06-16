@@ -15,7 +15,9 @@ import { players_m } from './player.service';
 import { player_m } from './movie/movie.list.component';
 import { login } from './login/login.user.component';
 import { users } from './user.service';
+import { CarDetailsService } from './carDetails.service';
 import { UsersComponent } from './users/users.component';
+import { CarDetailsComponent } from './car-details/car-details.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { UsersComponent } from './users/users.component';
     createProduct_m,
     player_m,
     login,
-    UsersComponent
+    UsersComponent,
+    CarDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -35,15 +38,16 @@ import { UsersComponent } from './users/users.component';
       { path: 'update', component: createProduct_m },
       { path: 'list', component: player_m },
       { path: 'login', component: login },
-      { path: 'users', component: UsersComponent }
-
+      { path: 'users', component: UsersComponent },
+      { path: 'parkCar', component: CarDetailsComponent }
     ])
   ],
   providers: [
     Product2Service,
     players_m,
-    users
+    users,
+    CarDetailsService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { } { }

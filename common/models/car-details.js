@@ -79,7 +79,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
@@ -87,7 +87,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
@@ -95,7 +95,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
@@ -103,7 +103,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
@@ -111,7 +111,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           }
         ],

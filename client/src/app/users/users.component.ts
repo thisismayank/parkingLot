@@ -24,7 +24,8 @@ export class UsersComponent implements OnInit {
   }
 
   getUsers() {
-    this.roleOfLoggedInUser = localStorage.getItem('role') ? localStorage.getItem('role'): null;
+    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+    this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
     this.role = this.roleOfLoggedInUser ? true : false;
     this.service.getUsers(this.roleOfLoggedInUser).toPromise()
     .then((response: any)=>{

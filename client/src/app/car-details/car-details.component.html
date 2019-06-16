@@ -1,0 +1,29 @@
+
+<div *ngIf="!errorStatus"  class="container">
+  <h1>Form</h1>
+  <div class="form-group">
+      <label> Registration No. </label>
+      <input [(ngModel)]='registrationNumber' type="text" class="form-control">
+  </div>
+  <div class="form-group">
+      <label> Color </label>
+      <input [(ngModel)] = 'color' type="text" class="form-control">
+  </div>
+  <div class="form-group">
+      <label> Make of Car </label>
+      <input [(ngModel)]='makeOfCar' type="text" class="form-control">
+  </div>
+  <div class="form-group">
+    <label> Model of Car </label>
+    <input [(ngModel)]='modelOfCar' type="text" class="form-control">
+</div>
+  <br>
+  <div class="form-group">
+      <button class="btn btn-success" (click)="onSave()">Save</button>
+      <button class="btn btn-danger" style="margin-left: 5px;" (click)="onCancel()">Cancel</button>
+  </div>
+</div>
+<div *ngIf="errorStatus" class = "counter">
+  <h4>{{message}} {{timer}}</h4>
+  <h2>{{error}}</h2>
+</div>
