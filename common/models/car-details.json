@@ -32,7 +32,7 @@
     },
     "unparkingTime": {
       "type": "date",
-      "required": true
+      "required": false
     }
   },
   "validations": [],

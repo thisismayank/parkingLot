@@ -18,6 +18,7 @@ import { users } from './user.service';
 import { CarDetailsService } from './carDetails.service';
 import { UsersComponent } from './users/users.component';
 import { CarDetailsComponent } from './car-details/car-details.component';
+// import { ParkingTicketComponent } from './car-details/parking-ticket/parking-ticket.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { CarDetailsComponent } from './car-details/car-details.component';
     player_m,
     login,
     UsersComponent,
-    CarDetailsComponent
+    CarDetailsComponent,
+    // ParkingTicketComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +41,9 @@ import { CarDetailsComponent } from './car-details/car-details.component';
       { path: 'list', component: player_m },
       { path: 'login', component: login },
       { path: 'users', component: UsersComponent },
-      { path: 'parkCar', component: CarDetailsComponent }
+      { path: 'parkCar', component: CarDetailsComponent },
+      // { path: 'ticket', component: ParkingTicketComponent }
+
     ])
   ],
   providers: [

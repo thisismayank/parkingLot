@@ -24,8 +24,7 @@ module.exports = function(Cardetails) {
                 makeOfCar: makeOfCar,
                 isActive: true,
                 parkingDetailsId: null,
-                parkingTime: new Date(),
-                unparkingTime: null
+                parkingTime: new Date()
             });
             })
             .then(function(carDetails){
