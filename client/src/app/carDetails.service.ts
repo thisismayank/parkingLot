@@ -16,4 +16,9 @@ export class CarDetailsService {
     return this.http.post(this.baseUrl + path + query, '');
   }
 
+  public listCars(appUserId) {
+    const path = '/parkingDetails/fetchcars';
+    const query = `?appUserId=${appUserId}`;
+    return this.http.post(this.baseUrl + path + query, '');
+  }
 }

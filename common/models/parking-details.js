@@ -1,4 +1,5 @@
 'use strict';
+const _ = require('underscore');
 
 module.exports = function(Parkingdetails) {
 
@@ -36,8 +37,10 @@ module.exports = function(Parkingdetails) {
         const promise = new Promise(function (resolve, reject) {
           let parkingInformation;
           Parkingdetails.find({
-            carDetailId: carDetailId,
-            isActive: true
+            where: {
+              carDetailId: carDetailId,
+              isActive: true
+            }
           })
             .then(function (parkingData) {
               parkingInformation = parkingData;
@@ -70,22 +73,54 @@ module.exports = function(Parkingdetails) {
         }
       };
     
-      Parkingdetails.remoteMethod('login', {
+      Parkingdetails.fetchCars = function (appUserId, callback) {
+        const promise = new Promise(function (resolve, reject) {
+          let parkingInformation;
+          Parkingdetails.find({
+            where: {
+              appUserId: appUserId,
+              isActive: true
+            },
+            include: [{
+              relation: 'carDetails'
+            }]
+          })
+            .then(function (parkingData) {
+              parkingInformation = parkingData;
+              if(!parkingData) {
+                  return resolve({success: false, message: 'This car is not parked'});
+              }
+              let parkedCars = _.map(parkingInformation, (cars)=>{
+                let tempObj = {
+                  slotNumber: cars.slotNumber,
+                  floorNumber: cars.floorNumber,
+                  carRegistrationNumber: cars.carDetails() ? cars.carDetails().registrationNo : null,
+                  carColor: cars.carDetails() ? cars.carDetails().color: null,
+                  carModel: cars.carDetails() ? cars.carDetails().modelOfCar: null
+                };
+                return tempObj;
+              })
+              return resolve({success: true, message: 'done', data: parkedCars, total: parkedCars.length});
+            })
+            .catch(function (err) {
+              return reject(err);
+            });
+        });
+    
+        if (callback !== null && typeof callback === 'function') {
+          promise.then(function (data) { return callback(null, data); }).catch(function (err) { return callback(err); });
+        } else {
+          return promise;
+        }
+      };
+      Parkingdetails.remoteMethod('fetchCars', {
         accepts: [
           {
-            arg: 'userCode',
+            arg: 'appUserId',
             type: 'string',
             required: true,
             http: {
-              source: 'form'
-            }
-          },
-          {
-            arg: 'password',
-            type: 'string',
-            required: true,
-            http: {
-              source: 'form'
+              source: 'query'
             }
           }
         ],
@@ -95,9 +130,9 @@ module.exports = function(Parkingdetails) {
           root: true
         },
         http: {
-          path: '/login',
+          path: '/fetchcars',
           verb: 'POST'
         },
-        description: 'API to login'
+        description: 'API to fetch cars of a user'
       });
 };

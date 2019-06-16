@@ -26,6 +26,9 @@ export class login
     error = '';
     timer = 0;
     message = '';
+    roleOfLoggedInUser: any;
+    role: any;
+    appUserId: any;
 
     onSave()
     {
@@ -44,11 +47,24 @@ export class login
                 if(data.data.role === 'ADMIN') {
                     this.router.navigate(['/users']);
                 } else {
-                    this.router.navigate(['/parkCar']);
+                    this.errorStatus = true;
                 }
             } 
         });
     }
+
+    parkCar()
+    {
+        let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+        this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
+        if(this.roleOfLoggedInUser !== 'ADMIN') {
+            return this.router.navigate(['/parkCar']);
+        }
+    };
+
+    showCars() {
+            return this.router.navigate(['/showCar']);
+    };
 
     onCancel()
     {

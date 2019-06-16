@@ -19,7 +19,7 @@
         <button class="btn btn-danger" style="margin-left: 5px;" (click)="onCancel()">Cancel</button>
     </div>
 </div>
-<div *ngIf="errorStatus" class = "counter">
-    <h4>{{message}} {{timer}}</h4>
-    <h2>{{error}}</h2>
+<div *ngIf="errorStatus" class ="container">
+    <button class="btn btn-success"  style="margin-left: 40%;" (click)="parkCar()">Park Car</button>
+    <button class="btn btn-danger" style="margin-left: 50%;" (click)="showCars()">List Cars</button>
 </div>
