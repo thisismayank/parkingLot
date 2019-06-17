@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { players_m } from './../player.service';
@@ -10,8 +10,20 @@ import { users } from '../user.service';
     styleUrls : ['./create.product.component.css']
 })
 
-export class createProduct_m
+export class register implements OnInit
 {
+    ngOnInit() {
+        let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+
+        if(token) {
+            let roleOfLoggedInUser = token ? JSON.parse(token).role : null;
+            if(roleOfLoggedInUser === 'ADMIN') {
+                this.router.navigate(['/admin'])
+            } else {
+            this.router.navigate(['/userDashboard'])
+            }
+        }   
+    }
     firstName: any;
     lastName: any;
     userCode: any;

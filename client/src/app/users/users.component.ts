@@ -20,6 +20,11 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.role = false;
+    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+    let roleOfLoggedInUser = token ? JSON.parse(token).role : null;
+    if(!token && roleOfLoggedInUser !== 'ADMIN') {
+      this.router.navigate(['/login']);
+    }
     this.getUsers();
   }
 

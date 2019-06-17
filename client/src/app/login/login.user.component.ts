@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { CarDetailsService } from './../carDetails.service';
+import { Component, OnInit } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { users } from '../user.service';
@@ -9,10 +10,22 @@ import { users } from '../user.service';
     styleUrls : ['./login.user.component.css']
 })
 
-export class login
+export class login implements OnInit
 {
     service : users;
 
+    ngOnInit() {
+        let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+
+        if(token) {
+            let roleOfLoggedInUser = token ? JSON.parse(token).role : null;
+            if(roleOfLoggedInUser === 'ADMIN') {
+                this.router.navigate(['/admin'])
+            } else {
+            this.router.navigate(['/userDashboard'])
+            }
+        }   
+    }
     constructor( service: users, private router: Router, private route : ActivatedRoute )
     {
         this.service = service;
@@ -22,13 +35,13 @@ export class login
     email = '';
     password = '';
 
-    errorStatus = false;
     error = '';
     timer = 0;
     message = '';
     roleOfLoggedInUser: any;
     role: any;
     appUserId: any;
+    registrationNumber: any;
 
     onSave()
     {
@@ -47,24 +60,11 @@ export class login
                 if(data.data.role === 'ADMIN') {
                     this.router.navigate(['/admin']);
                 } else {
-                    this.errorStatus = true;
+                    this.router.navigate(['/userDashboard']);
                 }
             } 
         });
     }
-
-    parkCar()
-    {
-        let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-        this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
-        if(this.roleOfLoggedInUser !== 'ADMIN') {
-            return this.router.navigate(['/parkCar']);
-        }
-    };
-
-    showCars() {
-            return this.router.navigate(['/showCar']);
-    };
 
     onCancel()
     {
@@ -73,5 +73,5 @@ export class login
         this.password = '' ;
         this.router.navigate(['/login']);
     }
-    
+
 };

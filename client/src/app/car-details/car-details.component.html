@@ -1,5 +1,11 @@
+<button class="btn btn-danger" style="margin-left: 5px;" (click)="goBackToDashBoard()">Back To Main Dashboard</button>
 
-<div *ngIf="!details"  class="container">
+<div class="form-group" *ngIf="!selected">
+    <button class="btn btn-success" (click)="onPark()">Park</button>
+    <button class="btn btn-danger" style="margin-left: 5px;" (click)="onUnpark()">Unpark</button>
+</div>
+
+<div *ngIf="park && !unpark && selected && !details"  class="container">
     <h1>Form</h1>
     <div class="form-group">
         <label> Registration No. </label>
@@ -19,11 +25,16 @@
   </div>
     <br>
     <div class="form-group">
-        <button class="btn btn-success" (click)="onSave()">Save</button>
+        <button class="btn btn-success" (click)="onParkCar()">Park</button>
         <button class="btn btn-danger" style="margin-left: 5px;" (click)="onCancel()">Cancel</button>
     </div>
+<button class="btn btn-danger" style="margin-left: 5px;" (click)="goBack()">Back To Park Unpark</button>
+
   </div>
-  <div *ngIf="details">
+
+  <div *ngIf="details && park && !unpark && selected">
+    <button class="btn btn-danger" style="margin-left: 5px;" (click)="goBack()">Back To Park Unpark</button>
+
     <table class="table table-hover col-lg-10 container">
         <thead>
             <th>id</th>
@@ -46,4 +57,43 @@
 
         </tr>
     </table>
-    </div>>
+    </div>
+
+    <div *ngIf="unpark && !park && selected && !details"  class="container">
+        <h1>Form</h1>
+        <div class="form-group">
+            <label> Registration No. </label>
+            <input [(ngModel)]='registrationNumber' type="text" class="form-control">
+        </div>
+        <br>
+        <div class="form-group">
+            <button class="btn btn-success" (click)="onUnparkCar()">Unpark</button>
+            <button class="btn btn-danger" style="margin-left: 5px;" (click)="onCancel()">Cancel</button>
+        </div>
+<button class="btn btn-danger" style="margin-left: 5px;" (click)="goBack()">Back To Park Unpark</button>
+
+      </div>
+
+      <div *ngIf="details && unpark && !park && selected">
+        <table class="table table-hover col-lg-10 container">
+            <thead>
+                <th>id</th>
+                <th>Reg#</th>
+                <th>Slot#</th>
+                <th>Floor#</th>
+                <th>Parking Time</th>
+                <th>Unparking Time</th>
+        
+            </thead>
+            <tr>
+                <td>1</td>
+                <td>{{registrationNumber}} </td>
+                <td>{{slotNumber}}</td>
+                <td>{{floorNumber}}</td>
+                <td>{{parkingTime}}</td>
+                <td>{{unparkingTime}}</td>
+            </tr>
+        </table>
+<button class="btn btn-danger" style="margin-left: 5px;" (click)="goBack()">Back To Park Unpark</button>
+
+        </div>

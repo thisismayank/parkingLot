@@ -1,0 +1,26 @@
+<div class ="container" *ngIf="!parkedNearBy">
+  <button class="btn btn-success"  style="margin-left: 20%;" (click)="parkUnparkCar()">Park / Unpark Car</button>
+  <button class="btn btn-danger" style="margin-left: 40%;" (click)="showCars()">List Cars</button>
+ <button class="btn btn-danger" style="margin-left: 60%; margin-top: 10%" (click)="logout()">Logout</button>
+
+</div>
+
+<div *ngIf = "parkedNearBy">
+  <table class="table table-hover col-lg-10 users">
+      <thead>
+          <th>id</th>
+          <th>Reg#</th>
+          <th>Color</th>
+          <th>Slot#</th>
+          <th>Floor#</th>
+  
+      </thead>
+      <tr *ngFor="let x of cars; let i = index">
+          <td>i + 1</td>
+          <td>{{x.registrationNumber}} </td>
+          <td>{{x.color}} </td>
+          <td>{{x.slotNumber}} </td>
+          <td>{{x.floorNumber}}</td>
+      </tr>
+  </table>
+  </div>

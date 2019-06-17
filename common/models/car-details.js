@@ -127,7 +127,7 @@ module.exports = function(Cardetails) {
       });
 
 
-      Cardetails.unparkCar = function (registrationNo, callback) {
+      Cardetails.unparkCar = function (registrationNo, appUserId, callback) {
         const promise = new Promise(function (resolve, reject) {
           let carInformation, parkingInformation;
           Cardetails.findOne({
@@ -137,16 +137,32 @@ module.exports = function(Cardetails) {
             }
           })
             .then(function (carDetails) {
+              // console.log(carDetails);
+              // carInformation = carDetails;
               carInformation = carDetails;
-              carDetails.isActive = false;
-              carDetails.unparkingTime = new Date();
-              return carDetails.save();
+              return Cardetails.app.models.parkingDetails.unpark(carDetails.id, appUserId);
             })
-            .then(function() {
-              return Cardetails.app.models.parkingDetails.unpark(carInformation.id);
-            })
-            .then(function (parkingInformation) {
-              return resolve({success: true, message: 'Car unparked successfully', data: parkingInformation});
+            .then(function (parkingData) {
+              // console.log('parkingData in CarDetails', parkingData.data);
+              parkingInformation = parkingData.data;
+              if(parkingData.success === true) {
+                  carInformation.isActive = false;
+                  carInformation.unparkingTime = new Date();
+                  // console.log('carInformation', carInformation);
+                  return carInformation.save();
+                  }
+                })
+                .then(carData=>{
+                  // console.log('car data', carData);
+              let details = {
+                registrationNumber: carData.registrationNo,
+                parkingTime: carData.parkingTime,
+                unparkingTime: carData.unparkingTime,
+                slotNumber: parkingInformation.slotNumber,
+                floorNumber: parkingInformation.floorNumber
+              };
+              // console.log('details', details);
+              return resolve({success: true, message: 'Car unparked successfully', data: details});
             })
             .catch(function (err) {
               return reject(err);
@@ -164,6 +180,14 @@ module.exports = function(Cardetails) {
         accepts: [
           {
             arg: 'registrationNo',
+            type: 'string',
+            required: true,
+            http: {
+              source: 'query'
+            }
+          },
+          {
+            arg: 'appUserId',
             type: 'string',
             required: true,
             http: {
@@ -192,6 +216,7 @@ module.exports = function(Cardetails) {
 
           color = color.toLowerCase();
           let carInformation;
+          // console.log('color', color);
           Cardetails.find({
             where: {
               color: color,
@@ -199,7 +224,7 @@ module.exports = function(Cardetails) {
             }
           })
             .then(function (carDetails) {
-              carInformation = _.pluck(carDetails, 'registrationNumber');
+              carInformation = _.pluck(carDetails, 'registrationNo');
               return resolve({success: true, message: 'Done', data: carInformation});
             })
             .catch(function (err) {
@@ -251,7 +276,7 @@ module.exports = function(Cardetails) {
             return resolve({success: false, message: 'Not authorized'});
           } 
 
-          let slotNumber; 
+          let slotNumber, carDetails; 
             Cardetails.findOne({
               where: {
                 registrationNo: registrationNumber,
@@ -259,7 +284,7 @@ module.exports = function(Cardetails) {
               }
             })
             .then(carData => {
-                console.log(carData);
+              carDetails = carData;
               return Cardetails.app.models.parkingDetails.findOne({
                 where: {
                   carDetailId: carData.id,
@@ -268,8 +293,14 @@ module.exports = function(Cardetails) {
               });
             })
             .then(parkingData => {
+              let data = {
+                registrationNumber: carDetails.registrationNo,
+                parkingTime: carDetails.parkingTime,
+                slotNumber: parkingData.slotNumber,
+                floorNumber: parkingData.floorNumber
+              };
               slotNumber = parkingData.slotNumber;
-            return resolve({sucess: true, message: 'slots fetched successfully', data: slotNumber, total: slotNumber.length});
+            return resolve({sucess: true, message: 'slots fetched successfully', data: data, total: data.length});
           })
             .catch(function (err) {
               return reject(err);
@@ -389,36 +420,28 @@ module.exports = function(Cardetails) {
       Cardetails.carsParkedBy = function (registrationNumber, callback) {
         const promise = new Promise(function (resolve, reject) {
 
-          let promise, slotNumber; 
+          let slotNumber; 
           Cardetails.findOne({
             where: {
-              registrationNumber: registrationNumber,
+              registrationNo: registrationNumber,
               isActive: true
             }
           })
           .then(carData => {
-            return Cardetails.app.models.parkingDetails.find({
+            return Cardetails.app.models.parkingDetails.findOne({
               where: {
                 carDetailId: carData.id
               }
             });
           })
           .then(parkingData=>{
-            let slotNumber = parkingData.slotNumber;
+            slotNumber = parkingData.slotNumber;
             let floorNumber = parkingData.floorNumber;
 
-            let slotNumbers = [];
-            let i = 4;
-            while(i >= 0) {
-              let num = i > 2 ? slotNumber - 1 : slotNumber + 1;
-              slotNumbers.push(num);
-            }
             return Cardetails.app.models.parkingDetails.find({
               where: {
                 floorNumber: floorNumber,
-                slotNumber : {
-                  inq: slotNumbers
-                }
+                isActive: true,
               },
               include: [{
                 relation: 'carDetails'
@@ -427,17 +450,28 @@ module.exports = function(Cardetails) {
           })
           .then(data=>{
             let carsParkedNearBy = [];
+            let getOut = false;
+            let lessThanIterations = 2;
+            let moreThanIterations = 3;
             _.each(data, item=>{
+
+              if(lessThanIterations > 0 && slotNumber <= item.slotNumber) {
+                lessThanIterations = lessThanIterations - 1;
+              } else if(moreThanIterations > 0 && slotNumber >= item.slotNumber) {
+                moreThanIterations = moreThanIterations - 1;
+              } else {
+                return;
+              }
             let tempObj = {};
 
-              tempObj['registrationNumber'] = item.Cardetails() ? item.Cardetails().registrationNumber: null;
-              tempObj['color'] = item.Cardetails() ? item.carDetails().color : null;
+              tempObj['registrationNumber'] = item.Cardetails ? item.Cardetails.registrationNo: null;
+              tempObj['color'] = item.Cardetails ? item.Cardetails.color : null;
               tempObj['slotNumber'] = item.slotNumber;
               tempObj['floorNumber'] = item.floorNumber;
 
               carsParkedNearBy.push(tempObj);
             });
-            return resolve({sucess: true, message: 'Done', data: carsParkedNearBy});
+            return resolve({sucess: true, message: 'Done', data: carsParkedNearBy, total: carsParkedNearBy.length});
           })
             .catch(function (err) {
               return reject(err);

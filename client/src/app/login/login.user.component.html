@@ -1,5 +1,5 @@
 
-<div *ngIf="!errorStatus"  class="container">
+<div class="container">
     <h1>Login Form</h1>
     <div class="form-group">
         <label> User Code </label>
@@ -15,11 +15,10 @@
     </div>
     <br>
     <div class="form-group">
-        <button class="btn btn-success" (click)="onSave()">Save</button>
+        <button class="btn btn-success" (click)="onSave()">Login</button>
         <button class="btn btn-danger" style="margin-left: 5px;" (click)="onCancel()">Cancel</button>
     </div>
 </div>
-<div *ngIf="errorStatus" class ="container">
-    <button class="btn btn-success"  style="margin-left: 40%;" (click)="parkCar()">Park Car</button>
-    <button class="btn btn-danger" style="margin-left: 50%;" (click)="showCars()">List Cars</button>
-</div>
+
+
+

@@ -33,16 +33,19 @@ module.exports = function(Parkingdetails) {
         }
       };
 
-      Parkingdetails.unpark = function (carDetailId, callback) {
+      Parkingdetails.unpark = function (carDetailId, appUserId, callback) {
         const promise = new Promise(function (resolve, reject) {
-          let parkingInformation;
-          Parkingdetails.find({
+          let parkingInformation, details;
+          Parkingdetails.findOne({
             where: {
               carDetailId: carDetailId,
+              appUserId: appUserId,
               isActive: true
             }
           })
             .then(function (parkingData) {
+              // console.log('parkingData', parkingData);
+              
               parkingInformation = parkingData;
               if(!parkingData) {
                   return resolve({success: false, message: 'This car is not parked'});
@@ -50,15 +53,19 @@ module.exports = function(Parkingdetails) {
               return Parkingdetails.app.models.floorDetails.removeCar(parkingData.floorNumber);
             })
             .then(function(floorInformation) {
-
-              parkingInformation.slotNumber = null;
-              parkingInformation.floorNumber = null;
-              parkingInformation.floorDetailId = null;
+              // console.log('floorInfo',floorInformation.data);
+              details = {
+                slotNumber: parkingInformation.slotNumber,
+                floorNumber: parkingInformation.floorNumber
+              }
+              parkingInformation.isActive = false;
+              // console.log('parkingInformation', parkingInformation);
               
               return parkingInformation.save();
             })
             .then(function(data) {
-              return resolve({ success: true, message: 'Car unparked successfully', data: data });
+              // console.log('details', details);
+              return resolve({ success: true, message: 'Car unparked successfully', data: details });
 
             })
             .catch(function (err) {

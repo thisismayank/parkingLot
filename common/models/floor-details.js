@@ -60,6 +60,7 @@ module.exports = function(Floordetails) {
             }
           })
             .then(function (floorData) {
+              // console.log('floorData', floorData);
               floorDetails = floorData;
               if(!floorData.hasFreeSlots) {
                 floorData.hasFreeSlots = true;
@@ -69,7 +70,7 @@ module.exports = function(Floordetails) {
               return floorData.save();
             })
             .then((data)=>{
-              return resolve({success: true, message: 'Floor table updated successfully', data: floorData});
+              return resolve({success: true, message: 'Floor table updated successfully', data: floorDetails});
             })
             .catch(function (err) {
               return reject(err);

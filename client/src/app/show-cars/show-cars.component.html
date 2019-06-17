@@ -1,3 +1,5 @@
+<button class="btn btn-danger" style="margin-left: 50%;" (click)="goBack()">Back</button>
+
 <div>
     <table class="table table-hover col-lg-10 container">
         <thead>
@@ -8,8 +10,6 @@
             <th>Color</th>
             <th>Model</th>
             <th>Action</th>
-            <th></th>
-    
         </thead>
         <tr *ngFor="let x of cars; let i = index">
             <td>i + 1</td>
@@ -18,9 +18,7 @@
             <td>{{x.carRegistrationNumber}} </td>
             <td>{{x.carColor}}</td>
             <td>{{x.carModel}}</td>
-            <td><button class="btn btn-danger" (click)="onEdit(x.id)">Edit</button></td>
-            <td><button class="btn btn-danger" (click)="onDelete(x.id)">Delete</button></td>
-    
+            <td><button class="btn btn-danger" (click)="onUnpark()">Action</button></td>
         </tr>
     </table>
     </div>

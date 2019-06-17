@@ -1,5 +1,5 @@
 
-<div class ="container" *ngIf="!regNoColor && !slotNoColor && !slotNoRegNo ">
+<div class ="container" *ngIf="!regNoColor && !slotNoColor && !slotNoRegNo && !grid ">
         <h1>Fill in details according to search needs</h1>
         <div class="form-group">
             <label> Color </label>
@@ -12,9 +12,10 @@
         <br>
 
   <button class="btn btn-success"  style="margin-left: 5%;" (click)="fetchCarsOfColor()">Show registration number of cars of a color</button>
-  <button class="btn btn-danger" style="margin-left: 30%;" (click)="showSlotsOfCarsOfColor()">List slots of cars of a color </button>
-  <button class="btn btn-success"  style="margin-left: 50%;" (click)="showSlotOfCarOfRegNo()">Show slot of a car</button>
-  <button class="btn btn-success"  style="margin-left: 75%;" (click)="getUsers()">Show Subscribers</button>
+  <button class="btn btn-danger" style="margin-left: 20%;" (click)="showSlotsOfCarsOfColor()">List slots of cars of a color </button>
+  <button class="btn btn-success"  style="margin-left: 30%;" (click)="showSlotOfCarOfRegNo()">Show slot of a car</button>
+  <button class="btn btn-success"  style="margin-left: 45%;" (click)="getUsers()">Show Subscribers</button>
+  <button class="btn btn-success"  style="margin-left: 65%;" (click)="showGrid()">Show Grid</button>
 
 </div>
 
@@ -41,14 +42,17 @@
         <table class="table table-hover col-lg-10 container">
             <thead>
                 <th>id</th>
+                <th>Reg#</th>
+                <th>Parking Time</th>
                 <th>Slot#</th>
-                <th>Color</th>
-        
+                <th>Floor#</th>
             </thead>
-            <tr *ngFor="let x of cars; index as i">
-                <td>i + 1</td>
-                <td>{{x}} </td>
-                <td>{{color}} </td>
+            <tr>
+                <td>1</td>
+                <td>{{registrationNumber}} </td>
+                <td>{{parkingTime}} </td>
+                <td>{{slotNumber}}</td>
+                <td>{{floorNumber}}</td>
             </tr>
         </table>
         </div>
@@ -67,3 +71,25 @@
                 </tr>
             </table>
             </div>
+
+            <div *ngIf="grid">
+                <table class="table table-hover col-lg-10 container">
+                    <thead>
+                        <th>id</th>
+                        <th>Floor#</th>
+                        <th>Max Slots</th>
+                        <th>Filled Slots</th>
+                        <th>Has Free Slots</th>
+                
+                    </thead>
+                    <tr *ngFor="let x of cars; index as i">
+                        <td>i + 1</td>
+                        <td>{{x.floorNumber}} </td>
+                        <td>{{x.maxSlots}} </td>
+                        <td>{{x.numberOfFilledSlots}}</td>
+                        <td>{{x.hasFreeSlots}}</td>
+                    </tr>
+                </table>
+                </div>
+
+  <button class="btn btn-success"  style="margin-left: 65%;" (click)="logout()">Logout</button>

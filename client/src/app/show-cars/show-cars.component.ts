@@ -16,6 +16,10 @@ export class ShowCarsComponent implements OnInit {
   constructor(private service: CarDetailsService, private router: Router) { }
 
   ngOnInit() {
+    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+    if(!token) {
+      this.router.navigate(['/login']);
+    }
     this.showCars();
   }
 
@@ -31,4 +35,12 @@ export class ShowCarsComponent implements OnInit {
         })
     }
 };
+
+onUnpark() {
+  return this.router.navigate(['/parkCar'])
+}
+
+goBack() {
+  return this.router.navigate(['/login']);
+}
 }

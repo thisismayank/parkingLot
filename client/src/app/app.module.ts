@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 import { products_m } from './productList/product.list.component';
 import { product2_m } from './productList2/product2.list.component';
 import { Product2Service } from './product2.service';
-import { createProduct_m } from './createProduct/create.product.component';
+import { register } from './createProduct/create.product.component';
 import { players_m } from './player.service';
 import { player_m } from './movie/movie.list.component';
 import { login } from './login/login.user.component';
@@ -21,6 +21,7 @@ import { CarDetailsComponent } from './car-details/car-details.component';
 import { ShowCarsComponent } from './show-cars/show-cars.component';
 // import { FetchCarDetailsComponent } from './fetch-car-details/fetch-car-details.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 // import { ParkingTicketComponent } from './car-details/parking-ticket/parking-ticket.component';
 
 @NgModule({
@@ -28,7 +29,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
     AppComponent,
     products_m,
     product2_m,
-    createProduct_m,
+    register,
     player_m,
     login,
     UsersComponent,
@@ -36,6 +37,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
     ShowCarsComponent,
     // FetchCarDetailsComponent,
     AdminDashboardComponent,
+    UserDashboardComponent,
     // ParkingTicketComponent
   ],
   imports: [
@@ -43,7 +45,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
     HttpModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: 'update', component: createProduct_m },
+      { path: 'register', component: register },
       { path: 'list', component: player_m },
       { path: 'login', component: login },
       { path: 'users', component: UsersComponent },
@@ -51,6 +53,8 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
       // { path: 'ticket', component: ParkingTicketComponent }
       { path: 'showCar', component: ShowCarsComponent },
       { path: 'admin', component: AdminDashboardComponent },
+      { path: 'userDashboard', component: UserDashboardComponent },
+
 
 
 

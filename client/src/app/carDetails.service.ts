@@ -29,7 +29,7 @@ export class CarDetailsService {
   }
   
   public listSlotOfCar(registrationNumber, roleOfLoggedInUser) {
-    const path = '/carDetails/fetchSlotNumber';
+    const path = '/carDetails/fetchslotnumber';
     const query = `?registrationNumber=${registrationNumber}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
     return this.http.post(this.baseUrl + path + query, '');
   }
@@ -39,4 +39,21 @@ export class CarDetailsService {
     const query = `?color=${color}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
     return this.http.post(this.baseUrl + path + query, '');
   }
+
+  public unparkCar(registrationNumber, appUserId) {
+    const path = '/carDetails/unparkcar';
+    const query = `?registrationNo=${registrationNumber}&appUserId=${appUserId}`;
+    return this.http.post(this.baseUrl + path + query, '');
+  }
+
+  public parkingGrid() {
+    const path = '/floorDetails/stateofparkingspace';
+    return this.http.get(this.baseUrl + path, '');
+  }
+
+  public parkedNearBy(registrationNumber) {
+    const path = '/carDetails/carsparkedby';
+    const query = `?registrationNumber=${registrationNumber}`;
+    return this.http.post(this.baseUrl + path + query, '');
+  } 
 }
