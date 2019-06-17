@@ -350,4 +350,64 @@ module.exports = function(Appuser) {
         },
         description: 'API to fetch all user data'
       });
+
+      Appuser.forgotPassword = function (userCode, email, callback) {
+        const promise = new Promise(function (resolve, reject) {
+          let message = '123456';
+          let subject = 'OTP for password reset';
+          let userData;
+          console.log('here....', email);
+          
+          let envelope = {
+            to: 'mayank.uiet7@gmail.com',
+            from: [],
+            message: ''
+          };
+
+          envelope['from'][0] = 'mayank.uiet7@gmail.com';
+          envelope['message'] = message
+          Appuser.app.models.Email.send(envelope, function(err) {
+            if (err) return console.log('> error sending password reset email', err);
+            console.log('> sending password reset email to:', email);
+            });
+        });
+    
+        if (callback !== null && typeof callback === 'function') {
+          promise.then(function (data) { return callback(null, data); }).catch(function (err) { return callback(err); });
+        } else {
+          return promise;
+        }
+      };
+    
+      Appuser.remoteMethod('forgotPassword', {
+        accepts: [
+          {
+            arg: 'userCode',
+            type: 'string',
+            required: true,
+            http: {
+              source: 'query'
+            }
+          },
+          {
+            arg: 'email',
+            type: 'string',
+            required: true,
+            http: {
+              source: 'query'
+            }
+          }
+        ],
+        returns: {
+          arg: 'data',
+          type: 'object',
+          root: true
+        },
+        http: {
+          path: '/forgotPassword',
+          verb: 'POST'
+        },
+        description: 'API to fetch all user data'
+      });
+
 };
