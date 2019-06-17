@@ -1,4 +1,5 @@
-<div class ="container" *ngIf="!regNoColor || !slotNoColor || !slotNoRegNo ">
+
+<div class ="container" *ngIf="!regNoColor && !slotNoColor && !slotNoRegNo ">
         <h1>Fill in details according to search needs</h1>
         <div class="form-group">
             <label> Color </label>
@@ -32,7 +33,10 @@
         </tr>
     </table>
     </div>
+<div class="container">
+    <button class="btn btn-success"  style="margin-left: 5%;" (click)="goBack()">Back</button>
 
+</div>
     <div *ngIf="slotNoRegNo">
         <table class="table table-hover col-lg-10 container">
             <thead>

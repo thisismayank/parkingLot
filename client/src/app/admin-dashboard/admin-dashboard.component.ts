@@ -37,6 +37,8 @@ export class AdminDashboardComponent implements OnInit {
     this.service.listCarsOfAColor(this.color, this.roleOfLoggedInUser).toPromise()
     .then((response: any)=>{
       this.regNoColor = true;
+    this.slotNoColor = false;
+    this.slotNoRegNo = false;
       this.cars = JSON.parse(response['_body']).data;
     });
   }
@@ -52,6 +54,7 @@ showSlotsOfCarsOfColor() {
   this.service.listSlotsOfCarsOfAColor(this.color, this.roleOfLoggedInUser).toPromise()
   .then((response: any)=>{
     this.slotNoColor = true;
+    this.slotNoColor = false;
     this.cars = JSON.parse(response['_body']).data;
   });
 }
@@ -66,11 +69,18 @@ showSlotOfCarOfRegNo() {
   this.service.listSlotOfCar(this.registrationNumber, this.roleOfLoggedInUser).toPromise()
   .then((response: any)=>{
     this.slotNoRegNo = true;
+    this.slotNoRegNo = false;
     this.cars = JSON.parse(response['_body']).data;
   });
 }
 }
 getUsers() {
   return this.router.navigate(['/users']);
+}
+
+goBack() {
+  this.regNoColor = false;
+  this.slotNoColor = false;
+  this.slotNoRegNo = false; 
 }
 }
