@@ -1,5 +1,5 @@
 
-<div class ="container" *ngIf="!regNoColor && !slotNoColor && !slotNoRegNo && !grid ">
+<div class ="container" *ngIf="!regNoColor && !slotNoColor && !slotNoRegNo && !grid && !disableUser">
         <h1>Fill in details according to search needs</h1>
         <div class="form-group">
             <label> Color </label>
@@ -16,6 +16,23 @@
   <button class="btn btn-success"  style="margin-left: 30%;" (click)="showSlotOfCarOfRegNo()">Show slot of a car</button>
   <button class="btn btn-success"  style="margin-left: 45%;" (click)="getUsers()">Show Subscribers</button>
   <button class="btn btn-success"  style="margin-left: 65%;" (click)="showGrid()">Show Grid</button>
+  <button class="btn btn-success"  style="margin-left: 65%;" (click)="disable()">Disable Users</button>
+
+</div>
+
+<div class ="container" *ngIf="disableUser">
+    <h1>Enter details of User you want to disable</h1>
+    <div class="form-group">
+        <label> User Code </label>
+        <input [(ngModel)]='userCode' type="text" class="form-control">
+    </div>
+    <div class="form-group">
+        <label> E-Mmail </label>
+        <input [(ngModel)] = 'email' type="text" class="form-control">
+    </div>
+    <br>
+
+    <button class="btn btn-success"  style="margin-left: 65%;" (click)="disableUsers()">Disable</button>
 
 </div>
 

@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CarDetailsService } from '../carDetails.service';
+import { users } from '../user.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -9,7 +10,7 @@ import { CarDetailsService } from '../carDetails.service';
 })
 export class AdminDashboardComponent implements OnInit {
 
-  constructor(private service: CarDetailsService, private router: Router) { }
+  constructor(private service: CarDetailsService, private service2: users, private router: Router) { }
 
   color: any;
   registrationNumber: any;
@@ -19,10 +20,14 @@ export class AdminDashboardComponent implements OnInit {
   slotNumber: any;
   floorNumber: any;
   cars: [];
+  userCode: any;
+  email: any;
+
   regNoColor: boolean;
   slotNoColor: boolean;
   slotNoRegNo: boolean;
   grid: boolean;
+  disableUser: boolean;
 
   ngOnInit() {
     let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
@@ -36,6 +41,7 @@ export class AdminDashboardComponent implements OnInit {
     this.slotNoColor = false;
     this.slotNoRegNo = false;
     this.grid = false;
+    this.disableUser = false;
   }
 
   fetchCarsOfColor() {
@@ -120,10 +126,29 @@ goBack() {
   this.slotNoColor = false;
   this.slotNoRegNo = false; 
   this.grid = false;
+  this.disableUser = false;
 }
 
 logout() {
   localStorage.removeItem('token');
   return this.router.navigate(['/login']);
+}
+
+disable() {
+  this.disableUser = true;
+}
+
+disableUsers() {
+  let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+  this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
+  
+  this.service2.disableUser(this.userCode, this.email, this.roleOfLoggedInUser).toPromise()
+  .then((response: any)=>{
+    let status = JSON.parse(response['_body']);
+    if(status.success === true) {
+      this.router.navigate(['/users']);
+    }; 
+
+  })
 }
 }

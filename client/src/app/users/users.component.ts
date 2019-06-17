@@ -39,6 +39,7 @@ export class UsersComponent implements OnInit {
         let tempObj = {
           name: item.name ? item.name: null,
           email: item.email ? item.email: null,
+          userCode: item.userCode ? item.userCode: null,
           role: item.role ? item.role : null
         }
         return tempObj;

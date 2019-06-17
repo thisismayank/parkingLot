@@ -39,6 +39,11 @@ export class users
         return this.http.post(this.baseUrl + path + query, '');
     }
 
+    public disableUser(userCode, email, roleOfLoggedInUser) {
+        const path = '/appUsers/disableuser';
+        const query = `?userCode=${userCode}&email=${email}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
+        return this.http.post(this.baseUrl + path + query, '');
+    }
     // public deletePlayer(id)
     // {
     //     return this.http.delete(this.baseUrl + '/' + id);

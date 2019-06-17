@@ -237,7 +237,8 @@ module.exports = function(Appuser) {
             where: {
               userCode: userCode,
               email: email,
-              isActive: true
+              isActive: true,
+              isRoot: false
             }
           })
             .then(function (user) {
@@ -265,28 +266,28 @@ module.exports = function(Appuser) {
     
       Appuser.remoteMethod('disableUser', {
         accepts: [
-              {
-                arg: 'email',
-                type: 'string',
-                required: true,
-                http: {
-                  source: 'form'
-                }
-              },  
           {
             arg: 'userCode',
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
+          {
+            arg: 'email',
+            type: 'string',
+            required: true,
+            http: {
+              source: 'query'
+            }
+          },  
           {
             arg: 'roleOfLoggedInUser',
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
         ],
@@ -308,7 +309,11 @@ module.exports = function(Appuser) {
             return resolve({success: false, message: 'Only an admin user is authorized'});
           }
           let userData;
-          Appuser.find()
+          Appuser.find({
+            where: {
+              isActive: true
+            }
+          })
             .then(function (user) {
               userData = user;
               if(!userData) {
