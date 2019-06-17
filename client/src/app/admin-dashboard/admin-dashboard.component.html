@@ -1,0 +1,65 @@
+<div class ="container" *ngIf="!regNoColor || !slotNoColor || !slotNoRegNo ">
+        <h1>Fill in details according to search needs</h1>
+        <div class="form-group">
+            <label> Color </label>
+            <input [(ngModel)]='color' type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label> Registration Number </label>
+            <input [(ngModel)] = 'registrationNumber' type="text" class="form-control">
+        </div>
+        <br>
+
+  <button class="btn btn-success"  style="margin-left: 5%;" (click)="fetchCarsOfColor()">Show registration number of cars of a color</button>
+  <button class="btn btn-danger" style="margin-left: 30%;" (click)="showSlotsOfCarsOfColor()">List slots of cars of a color </button>
+  <button class="btn btn-success"  style="margin-left: 50%;" (click)="showSlotOfCarOfRegNo()">Show slot of a car</button>
+  <button class="btn btn-success"  style="margin-left: 75%;" (click)="getUsers()">Show Subscribers</button>
+
+</div>
+
+<div *ngIf="regNoColor">
+    <table class="table table-hover col-lg-10 container">
+        <thead>
+            <th>id</th>
+            <th>Reg#</th>
+            <th>Color</th>
+    
+        </thead>
+        <tr *ngFor="let x of cars; index as i">
+            <td>i + 1</td>
+            <td>{{x}} </td>
+            <td>{{color}} </td>
+        </tr>
+    </table>
+    </div>
+
+    <div *ngIf="slotNoRegNo">
+        <table class="table table-hover col-lg-10 container">
+            <thead>
+                <th>id</th>
+                <th>Slot#</th>
+                <th>Color</th>
+        
+            </thead>
+            <tr *ngFor="let x of cars; index as i">
+                <td>i + 1</td>
+                <td>{{x}} </td>
+                <td>{{color}} </td>
+            </tr>
+        </table>
+        </div>
+        <div *ngIf="slotNoColor">
+            <table class="table table-hover col-lg-10 container">
+                <thead>
+                    <th>id</th>
+                    <th>Slot#</th>
+                    <th>Color</th>
+            
+                </thead>
+                <tr *ngFor="let x of cars; index as i">
+                    <td>i + 1</td>
+                    <td>{{x}} </td>
+                    <td>{{color}} </td>
+                </tr>
+            </table>
+            </div>

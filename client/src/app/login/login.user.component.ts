@@ -45,7 +45,7 @@ export class login
                 localStorage.removeItem('token');
                 localStorage.setItem('token', JSON.stringify(token));
                 if(data.data.role === 'ADMIN') {
-                    this.router.navigate(['/users']);
+                    this.router.navigate(['/admin']);
                 } else {
                     this.errorStatus = true;
                 }

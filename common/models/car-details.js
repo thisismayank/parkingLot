@@ -167,7 +167,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           }
         ],
@@ -221,7 +221,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
@@ -229,7 +229,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: false,
             http: {
-              source: 'form'
+              source: 'query'
             }
           }
         ],
@@ -245,22 +245,21 @@ module.exports = function(Cardetails) {
         description: 'API to fetch all cars of a particular color'
       });
 
-      Cardetails.fetchSlotNumbers = function (registrationNumber, color, roleOfLoggedInUser, callback) {
+      Cardetails.fetchSlotNumber = function (registrationNumber, roleOfLoggedInUser, callback) {
         const promise = new Promise(function (resolve, reject) {
           if(roleOfLoggedInUser !== 'ADMIN') {
             return resolve({success: false, message: 'Not authorized'});
           } 
-          color = color.toLowerCase();
 
-          let promise, slotNumber; 
-          if(registrationNumber && color === null) {
-            promise = Cardetails.findOne({
+          let slotNumber; 
+            Cardetails.findOne({
               where: {
-                registrationNumber: registrationNumber,
+                registrationNo: registrationNumber,
                 isActive: true
               }
             })
             .then(carData => {
+                console.log(carData);
               return Cardetails.app.models.parkingDetails.findOne({
                 where: {
                   carDetailId: carData.id,
@@ -270,33 +269,7 @@ module.exports = function(Cardetails) {
             })
             .then(parkingData => {
               slotNumber = parkingData.slotNumber;
-              return Promise.resolve();
-            }) 
-          } else if(color && registrationNumber === null) {
-            promise = Cardetails.find({
-              where: {
-                color: color
-              }
-            })
-            .then(carData => {
-              let carDetailIds = _.pluck(carData, 'id');
-              return Cardetails.app.models.parkingDetails.find({
-                where: {
-                  carDetailId: {
-                    inq: carDetailIds
-                  }
-                }
-              });
-            })
-            .then(parkingData => {
-              slotNumber = _.pluck(parkingData, 'slotNumber');
-              return Promise.resolve();
-            })
-          }
-
-          promise
-          .then(data => {
-            return resolve({sucess: true, message: 'slots fetched successfully', data: slotNumber});
+            return resolve({sucess: true, message: 'slots fetched successfully', data: slotNumber, total: slotNumber.length});
           })
             .catch(function (err) {
               return reject(err);
@@ -310,22 +283,14 @@ module.exports = function(Cardetails) {
         }
       };
     
-      Cardetails.remoteMethod('fetchSlotNumbers', {
+      Cardetails.remoteMethod('fetchSlotNumber', {
         accepts: [
           {
             arg: 'registrationNumber',
             type: 'string',
             required: false,
             http: {
-              source: 'form'
-            }
-          },
-          {
-            arg: 'color',
-            type: 'string',
-            required: false,
-            http: {
-              source: 'form'
+              source: 'query'
             }
           },
           {
@@ -333,7 +298,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: false,
             http: {
-              source: 'form'
+              source: 'query'
             }
           }
         ],
@@ -343,7 +308,79 @@ module.exports = function(Cardetails) {
           root: true
         },
         http: {
-          path: '/fetchslotnumbers',
+          path: '/fetchslotnumber',
+          verb: 'POST'
+        },
+        description: 'API to fetch all slot numbers of parked car'
+      });
+
+      Cardetails.fetchSlotNumbersOfColor = function (color, roleOfLoggedInUser, callback) {
+        const promise = new Promise(function (resolve, reject) {
+          if(roleOfLoggedInUser !== 'ADMIN') {
+            return resolve({success: false, message: 'Not authorized'});
+          } 
+          color = color.toLowerCase();
+
+          let slotNumber; 
+          Cardetails.find({
+            where: {
+              color: color,
+              isActive: true
+            }
+          })
+          .then(carData => {
+            let carDetailIds = _.pluck(carData, 'id');
+            return Cardetails.app.models.parkingDetails.find({
+              where: {
+                carDetailId: {
+                  inq: carDetailIds
+                },
+                isActive: true
+              }
+            });
+          })
+          .then(parkingData => {
+            slotNumber = _.pluck(parkingData, 'slotNumber');
+            return resolve({sucess: true, message: 'slots fetched successfully', data: slotNumber, total: slotNumber.length});
+          })
+            .catch(function (err) {
+              return reject(err);
+            });
+        });
+    
+        if (callback !== null && typeof callback === 'function') {
+          promise.then(function (data) { return callback(null, data); }).catch(function (err) { return callback(err); });
+        } else {
+          return promise;
+        }
+      };
+    
+      Cardetails.remoteMethod('fetchSlotNumbersOfColor', {
+        accepts: [
+          {
+            arg: 'color',
+            type: 'string',
+            required: false,
+            http: {
+              source: 'query'
+            }
+          },
+          {
+            arg: 'roleOfLoggedInUser',
+            type: 'string',
+            required: false,
+            http: {
+              source: 'query'
+            }
+          }
+        ],
+        returns: {
+          arg: 'data',
+          type: 'object',
+          root: true
+        },
+        http: {
+          path: '/fetchslotnumbersofcolor',
           verb: 'POST'
         },
         description: 'API to fetch all slot numbers of parked car'
@@ -421,7 +458,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: false,
             http: {
-              source: 'form'
+              source: 'query'
             }
           }
         ],

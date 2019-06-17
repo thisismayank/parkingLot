@@ -21,4 +21,22 @@ export class CarDetailsService {
     const query = `?appUserId=${appUserId}`;
     return this.http.post(this.baseUrl + path + query, '');
   }
+
+  public listCarsOfAColor(color, roleOfLoggedInUser) {
+    const path = '/carDetails/fetchallcarsofaparticularcolor';
+    const query = `?color=${color}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
+    return this.http.post(this.baseUrl + path + query, '');
+  }
+  
+  public listSlotOfCar(registrationNumber, roleOfLoggedInUser) {
+    const path = '/carDetails/fetchSlotNumber';
+    const query = `?registrationNumber=${registrationNumber}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
+    return this.http.post(this.baseUrl + path + query, '');
+  }
+
+  public listSlotsOfCarsOfAColor(color, roleOfLoggedInUser) {
+    const path = '/carDetails/fetchslotnumbersofcolor';
+    const query = `?color=${color}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
+    return this.http.post(this.baseUrl + path + query, '');
+  }
 }

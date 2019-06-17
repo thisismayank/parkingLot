@@ -19,6 +19,8 @@ import { CarDetailsService } from './carDetails.service';
 import { UsersComponent } from './users/users.component';
 import { CarDetailsComponent } from './car-details/car-details.component';
 import { ShowCarsComponent } from './show-cars/show-cars.component';
+// import { FetchCarDetailsComponent } from './fetch-car-details/fetch-car-details.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 // import { ParkingTicketComponent } from './car-details/parking-ticket/parking-ticket.component';
 
 @NgModule({
@@ -32,6 +34,8 @@ import { ShowCarsComponent } from './show-cars/show-cars.component';
     UsersComponent,
     CarDetailsComponent,
     ShowCarsComponent,
+    // FetchCarDetailsComponent,
+    AdminDashboardComponent,
     // ParkingTicketComponent
   ],
   imports: [
@@ -46,6 +50,8 @@ import { ShowCarsComponent } from './show-cars/show-cars.component';
       { path: 'parkCar', component: CarDetailsComponent },
       // { path: 'ticket', component: ParkingTicketComponent }
       { path: 'showCar', component: ShowCarsComponent },
+      { path: 'admin', component: AdminDashboardComponent },
+
 
 
     ])
