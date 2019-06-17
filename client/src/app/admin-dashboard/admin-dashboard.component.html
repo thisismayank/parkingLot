@@ -11,12 +11,12 @@
         </div>
         <br>
 
-  <button class="btn btn-success"  style="margin-left: 5%;" (click)="fetchCarsOfColor()">Show registration number of cars of a color</button>
-  <button class="btn btn-danger" style="margin-left: 20%;" (click)="showSlotsOfCarsOfColor()">List slots of cars of a color </button>
-  <button class="btn btn-success"  style="margin-left: 30%;" (click)="showSlotOfCarOfRegNo()">Show slot of a car</button>
-  <button class="btn btn-success"  style="margin-left: 45%;" (click)="getUsers()">Show Subscribers</button>
-  <button class="btn btn-success"  style="margin-left: 65%;" (click)="showGrid()">Show Grid</button>
-  <button class="btn btn-success"  style="margin-left: 65%;" (click)="disable()">Disable Users</button>
+  <button class="btn btn-success btnConfig" (click)="fetchCarsOfColor()">Show registration number of cars of a color</button>
+  <button class="btn btn-danger btnConfig" (click)="showSlotsOfCarsOfColor()">List slots of cars of a color </button>
+  <button class="btn btn-info btnConfig"  (click)="showSlotOfCarOfRegNo()">Show slot of a car</button>
+  <button class="btn btn-primary btnConfig"  (click)="getUsers()">Show Subscribers</button>
+  <button class="btn btn-warning btnConfig"  (click)="showGrid()">Show Grid</button>
+  <button class="btn btn-danger btnConfig"  (click)="disable()">Disable Users</button>
 
 </div>
 
@@ -51,10 +51,7 @@
         </tr>
     </table>
     </div>
-<div class="container">
-    <button class="btn btn-success"  style="margin-left: 5%;" (click)="goBack()">Back</button>
 
-</div>
     <div *ngIf="slotNoRegNo">
         <table class="table table-hover col-lg-10 container">
             <thead>
@@ -109,4 +106,5 @@
                 </table>
                 </div>
 
-  <button class="btn btn-success"  style="margin-left: 65%;" (click)="logout()">Logout</button>
+  <button class="btn btn-danger logoutBtnConfig"  style="margin-left: 65%;" (click)="logout()">Logout</button>
+  <button class="btn btn-success backBtnConfig"  style="margin-left: 5%;" (click)="goBack()">Back</button>

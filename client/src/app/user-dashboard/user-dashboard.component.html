@@ -1,8 +1,11 @@
 <div class ="container" *ngIf="!parkedNearBy">
-  <button class="btn btn-success"  style="margin-left: 20%;" (click)="parkUnparkCar()">Park / Unpark Car</button>
-  <button class="btn btn-danger" style="margin-left: 40%;" (click)="showCars()">List Cars</button>
- <button class="btn btn-danger" style="margin-left: 60%; margin-top: 10%" (click)="logout()">Logout</button>
-
+  <div class="btnConfig">
+    <button class="btn btn-success"  style="margin-left: 20%;" (click)="parkUnparkCar()">Park / Unpark Car</button>
+  </div>
+<div class="btnConfig">
+    <button class="btn btn-danger" style="margin-left: 40%;" (click)="showCars()">List Cars</button>
+</div>
+ <button class="btn btn-danger logoutBtnConfig" style="margin-left: 60%; margin-top: 10%" (click)="logout()">Logout</button>
 </div>
 
 <div *ngIf = "parkedNearBy">

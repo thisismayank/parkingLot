@@ -1,8 +1,12 @@
-<button class="btn btn-danger" style="margin-left: 5px;" (click)="goBackToDashBoard()">Back To Main Dashboard</button>
+<button class="btn btn-warning backBtnConfig" style="margin-left: 5px;" (click)="goBackToDashBoard()">Back To Dashboard</button>
 
 <div class="form-group" *ngIf="!selected">
-    <button class="btn btn-success" (click)="onPark()">Park</button>
-    <button class="btn btn-danger" style="margin-left: 5px;" (click)="onUnpark()">Unpark</button>
+    <div class="btnConfig">
+        <button class="btn btn-success" (click)="onPark()">Park</button>
+    </div>
+    <div class="btnConfig">
+        <button class="btn btn-danger" style="margin-left: 5px;" (click)="onUnpark()">Unpark</button>
+    </div>
 </div>
 
 <div *ngIf="park && !unpark && selected && !details"  class="container">
@@ -26,14 +30,14 @@
     <br>
     <div class="form-group">
         <button class="btn btn-success" (click)="onParkCar()">Park</button>
-        <button class="btn btn-danger" style="margin-left: 5px;" (click)="onCancel()">Cancel</button>
+        <button class="btn btn-info" style="margin-left: 5px;" (click)="onCancel()">Cancel</button>
     </div>
-<button class="btn btn-danger" style="margin-left: 5px;" (click)="goBack()">Back To Park Unpark</button>
+<button class="btn btn-warning backParkUnparkBtnConfig" style="margin-left: 5px;" (click)="goBack()">Back To Park/Unpark</button>
 
   </div>
 
   <div *ngIf="details && park && !unpark && selected">
-    <button class="btn btn-danger" style="margin-left: 5px;" (click)="goBack()">Back To Park Unpark</button>
+    <button class="btn btn-warning backParkUnparkBtnConfig" style="margin-left: 5px;" (click)="goBack()">Back To Park/Unpark</button>
 
     <table class="table table-hover col-lg-10 container">
         <thead>
@@ -70,7 +74,7 @@
             <button class="btn btn-success" (click)="onUnparkCar()">Unpark</button>
             <button class="btn btn-danger" style="margin-left: 5px;" (click)="onCancel()">Cancel</button>
         </div>
-<button class="btn btn-danger" style="margin-left: 5px;" (click)="goBack()">Back To Park Unpark</button>
+<button class="btn btn-warning backParkUnparkBtnConfig" style="margin-left: 5px;" (click)="goBack()">Back To Park/Unpark</button>
 
       </div>
 
@@ -94,6 +98,6 @@
                 <td>{{unparkingTime}}</td>
             </tr>
         </table>
-<button class="btn btn-danger" style="margin-left: 5px;" (click)="goBack()">Back To Park Unpark</button>
+<button class="btn btn-warning backParkUnparkBtnConfig" style="margin-left: 5px;" (click)="goBack()">Back To Park/Unpark</button>
 
         </div>

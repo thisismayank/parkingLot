@@ -1,0 +1,16 @@
+.logoutBtnConfig {
+    margin-top: 30px;
+    top: 130px;
+    right: 50%;
+    position: absolute;
+    display: inline-block;
+}
+
+.btnConfig {
+    height: 200px;
+    width: 45%;
+    margin-left: 5px;
+    border: 0px black solid;
+    display: inline-block;
+    align-content: center;
+}

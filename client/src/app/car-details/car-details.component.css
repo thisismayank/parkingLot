@@ -1,3 +1,26 @@
-.container {
-    margin-top: 100px;
+.backBtnConfig {
+    margin-top: 40px;
+    margin-right: 40%;
+    margin-left: 20px;
+    top: 50px;
+    right: 50%;
+    position: absolute;
+    display: inline-block;
+}
+
+.backParkUnparkBtnConfig {
+    top: -50px;
+    right: -85%;
+    position: relative;
+    display: inline-block;
+}
+
+.btnConfig {
+    margin-top: 50px;
+    height: 200px;
+    width: 100px;
+    margin-left: 5px;
+    border: 0px black solid;
+    display: inline-block;
+    align-content: center;
 }
