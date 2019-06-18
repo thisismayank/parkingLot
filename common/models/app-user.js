@@ -372,10 +372,94 @@ module.exports = function(Appuser) {
         },
         http: {
           path: '/fetchAllUsers',
-          verb: 'GET'
+          verb: 'POST'
         },
         description: 'API to fetch all user data'
       });
+
+      Appuser.authorizeCustomer = function (authorize, callback) {
+        const promise = new Promise(function (resolve, reject) {
+          
+          let authData = authUtils.verifyToken(token).data;
+          if(!authUtils.isAdmin(authData)) {
+            return resolve(false)
+          }
+
+          return resolve(true);
+        });
+    
+        if (callback !== null && typeof callback === 'function') {
+          promise.then(function (data) { return callback(null, data); }).catch(function (err) { return callback(err); });
+        } else {
+          return promise;
+        }
+      };
+    
+      Appuser.remoteMethod('authorizeCustomer', {
+        accepts: [
+          {
+            arg: 'token',
+            type: 'string',
+            required: true,
+            http: {
+              source: 'form'
+            }
+          }
+        ],
+        returns: {
+          arg: 'data',
+          type: 'object',
+          root: true
+        },
+        http: {
+          path: '/authorizeCustomer',
+          verb: 'POST'
+        },
+        description: 'API to fetch token'
+      });
+
+
+Appuser.authorizeAdmin = function (authorize, callback) {
+  const promise = new Promise(function (resolve, reject) {
+    
+    let authData = authUtils.verifyToken(token).data;
+    if(!authUtils.isCustomer(authData)) {
+      return resolve(false)
+    }
+
+    return resolve(true);
+  });
+
+  if (callback !== null && typeof callback === 'function') {
+    promise.then(function (data) { return callback(null, data); }).catch(function (err) { return callback(err); });
+  } else {
+    return promise;
+  }
+};
+
+Appuser.remoteMethod('authorizeAdmin', {
+  accepts: [
+    {
+      arg: 'token',
+      type: 'string',
+      required: true,
+      http: {
+        source: 'form'
+      }
+    }
+  ],
+  returns: {
+    arg: 'data',
+    type: 'object',
+    root: true
+  },
+  http: {
+    path: '/authorizeAdmin',
+    verb: 'POST'
+  },
+  description: 'API to fetch token'
+});
+
 
       Appuser.forgotPassword = function (userCode, email, callback) {
         const promise = new Promise(function (resolve, reject) {

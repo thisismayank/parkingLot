@@ -20,7 +20,7 @@ export class users
         const body = {
             token: token.toString()
         };
-        return this.http.get(this.baseUrl + path, body);
+        return this.http.post(this.baseUrl + path, body);
     }
 
     public login(userCode, password)
@@ -56,6 +56,22 @@ export class users
         const body = {
             userCode: userCode.toString(),
             email: email.toString(),
+            token: token.toString()
+        }
+        return this.http.post(this.baseUrl + path, body);
+    }
+
+    public authorizeCustomer(token) {
+        const path = '/appUsers/authorizeCustomer';
+        const body = {
+            token: token.toString()
+        }
+        return this.http.post(this.baseUrl + path, body);
+    }
+
+    public authorizeAdmin(token) {
+        const path = '/appUsers/authorizeAdmin';
+        const body = {
             token: token.toString()
         }
         return this.http.post(this.baseUrl + path, body);

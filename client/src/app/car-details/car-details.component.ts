@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CarDetailsService } from '../carDetails.service'
+import { users } from '../user.service';
 @Component({
   selector: 'app-car-details',
   templateUrl: './car-details.component.html',
@@ -23,13 +24,15 @@ export class CarDetailsComponent implements OnInit {
   unpark: boolean;
   selected: boolean;
   details: boolean;
-
+  token: any;
+  error: any;
   // service: CarDetailsComponent;
-  constructor( private service: CarDetailsService, private router: Router) { }
+  constructor( private service: CarDetailsService, private userService: users,private router: Router) { }
 
   ngOnInit() {
-    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    if(!token) {
+    this.token = localStorage.getItem('token');
+    if(!this.userService.authorizeCustomer(this.token)) {
+      this.error = 'Un-authorized'
       this.router.navigate(['/login']);
     }
     this.details = false;
@@ -52,9 +55,8 @@ export class CarDetailsComponent implements OnInit {
   }
 
   onParkCar() {
-    let token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
-    let appUserId = token ? JSON.parse(token).appUserId: null;
-    this.service.parkCar(this.registrationNumber, this.color, this.makeOfCar,  this.modelOfCar, appUserId).toPromise()
+
+    this.service.parkCar(this.registrationNumber, this.color, this.makeOfCar,  this.modelOfCar, this.token).toPromise()
     .then((response: any) => {
       let data = response ? JSON.parse(response['_body']) : null;
       if(data && data.success === true) {
@@ -73,9 +75,7 @@ export class CarDetailsComponent implements OnInit {
   }
 
   onUnparkCar() {
-    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    this.appUserId = token ? JSON.parse(token).appUserId : null;
-    return this.service.unparkCar(this.registrationNumber, this.appUserId).toPromise()
+    return this.service.unparkCar(this.registrationNumber, this.token).toPromise()
     .then((response: any)=>{
       let data = response ? JSON.parse(response['_body']) : null;
       if(data && data.success === true) {

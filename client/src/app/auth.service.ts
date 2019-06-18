@@ -20,6 +20,21 @@ export class AuthService {
       return this.http.post(this.baseUrl + query, data);
     }
 
+    public isCustomer(payload) {
+      if(payload.role === 'CUSTOMER') {
+        return true
+      } else {
+        return false
+      }
+    }
+    public isAdmin(payload) {
+      if(payload.role === 'ADMIN') {
+        return true
+      } else {
+        return false
+      }
+    }
+    
     public loggedIn() {
       return !!localStorage.getItem('token');
     }

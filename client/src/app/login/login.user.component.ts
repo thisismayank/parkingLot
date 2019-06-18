@@ -15,17 +15,9 @@ export class login implements OnInit
 {
     service : users;
 
+    token: any;
     ngOnInit() {
-        let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-
-        if(token) {
-            let roleOfLoggedInUser = token ? JSON.parse(token).role : null;
-            if(roleOfLoggedInUser === 'ADMIN') {
-                this.router.navigate(['/admin'])
-            } else {
-            this.router.navigate(['/userDashboard'])
-            }
-        }   
+        this.token = localStorage.getItem('token') ? localStorage.getItem('token'): null;   
     }
     constructor( service: users, private authService: AuthService, private router: Router, private route : ActivatedRoute )
     {
@@ -46,17 +38,17 @@ export class login implements OnInit
 
     onSave()
     {
-        // this.service.login(this.userCode, this.email, this.password).toPromise()
-        this.authService.login(this.userCode, this.password).toPromise()
+        this.service.login(this.userCode, this.password).toPromise()
+        // this.authService.login(this.userCode, this.password).toPromise()
         .then((response: any)=>{
-            // let data = JSON.parse(response['_body']);
+            let data = JSON.parse(response['_body']).data;
+            localStorage.removeItem('token');
+            localStorage.setItem('token', JSON.stringify(data.data));
+            // if(this.authService.loggedIn()) {
+            //     // this.router.navigate(['/userDashboard']);
+            //         this.router.navigate(['/admin']);
 
-            localStorage.setItem('token', response.data);
-            if(this.authService.loggedIn()) {
-                // this.router.navigate(['/userDashboard']);
-                    this.router.navigate(['/admin']);
-
-            }
+            // }
             // if(data.success === true) {
             //     let token = {
             //         role: data.data.role,
@@ -65,12 +57,11 @@ export class login implements OnInit
 
             //     localStorage.removeItem('token');
             //     localStorage.setItem('token', JSON.stringify(token));
-            //     if(data.data.role === 'ADMIN') {
-            //         this.router.navigate(['/admin']);
-            //     } else {
-            //         this.router.navigate(['/userDashboard']);
-            //     }
-            // } 
+                if(data.data.role === 'ADMIN') {
+                    this.router.navigate(['/admin']);
+                } else {
+                    this.router.navigate(['/userDashboard']);
+                }
         });
     }
 

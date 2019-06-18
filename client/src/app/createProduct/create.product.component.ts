@@ -13,17 +13,9 @@ import { users } from '../user.service';
 export class register implements OnInit
 {
     ngOnInit() {
-        let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-
-        if(token) {
-            let roleOfLoggedInUser = token ? JSON.parse(token).role : null;
-            if(roleOfLoggedInUser === 'ADMIN') {
-                this.router.navigate(['/admin'])
-            } else {
-            this.router.navigate(['/userDashboard'])
-            }
-        }   
+        this.token = localStorage.getItem('token') ? localStorage.getItem('token'): null;  
     }
+    token: any;
     firstName: any;
     lastName: any;
     userCode: any;
@@ -71,17 +63,13 @@ export class register implements OnInit
         //     console.log(response);
         // });
         // this.router.navigate(['/list']);
-        let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-        let roleOfLoggedInUser = token ? JSON.parse(token).role: null;
-        if(roleOfLoggedInUser) {
-        this.service.register(this.firstName, this.lastName, this.userCode, this.email, this.password, this.dob,this.gender,this.role, roleOfLoggedInUser).toPromise()
+        this.service.register(this.firstName, this.lastName, this.userCode, this.email, this.password, this.dob,this.gender,this.role, this.token).toPromise()
         .then((response: any)=>{
             let data = JSON.parse(response['_body']);
             if(data.success === true) {
                 this.router.navigate(['/login']);
             }
         });
-    }
     }
 
     onCancel()

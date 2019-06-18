@@ -10,7 +10,7 @@ import { users } from '../user.service';
 })
 export class AdminDashboardComponent implements OnInit {
 
-  constructor(private service: CarDetailsService, private service2: users, private router: Router) { }
+  constructor(private service: CarDetailsService, private userService: users, private router: Router) { }
 
   color: any;
   registrationNumber: any;
@@ -29,10 +29,12 @@ export class AdminDashboardComponent implements OnInit {
   grid: boolean;
   disableUser: boolean;
 
+  error: any;
+  token: any;
   ngOnInit() {
-    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
-    if(this.roleOfLoggedInUser !== 'ADMIN') {
+    this.token = localStorage.getItem('token');
+    if(!this.userService.authorizeAdmin(this.token)) {
+      this.error = 'Un-authorized'
       this.router.navigate(['/login']);
     }
     this.color = null;
@@ -46,32 +48,23 @@ export class AdminDashboardComponent implements OnInit {
 
   fetchCarsOfColor() {
     if(this.color){
-    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
-
-    if(this.roleOfLoggedInUser === 'ADMIN') {
-        
-    this.service.listCarsOfAColor(this.color, this.roleOfLoggedInUser).toPromise()
+ 
+    this.service.listCarsOfAColor(this.color, this.token).toPromise()
     .then((response: any)=>{
       this.regNoColor = true;
-    this.slotNoColor = false;
-    this.slotNoRegNo = false;
-    this.grid = false;
+      this.slotNoColor = false;
+      this.slotNoRegNo = false;
+      this.grid = false;
       this.cars = JSON.parse(response['_body']).data;
     });
-  }
 }
   }
 
 showSlotsOfCarsOfColor() {
 
   if(this.color){
-  let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-  this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
 
-  if(this.roleOfLoggedInUser === 'ADMIN') {
-      
-  this.service.listSlotsOfCarsOfAColor(this.color, this.roleOfLoggedInUser).toPromise()
+  this.service.listSlotsOfCarsOfAColor(this.color, this.token).toPromise()
   .then((response: any)=>{
     this.slotNoColor = true;
     this.regNoColor = false;
@@ -79,18 +72,13 @@ showSlotsOfCarsOfColor() {
     this.grid = false; 
     this.cars = JSON.parse(response['_body']).data;
   });
-}
   }
 }
 
 showSlotOfCarOfRegNo() {
   if(this.registrationNumber){
-  let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-  this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
-
-  if(this.roleOfLoggedInUser === 'ADMIN') {
       
-  this.service.listSlotOfCar(this.registrationNumber, this.roleOfLoggedInUser).toPromise()
+  this.service.listSlotOfCar(this.registrationNumber, this.token).toPromise()
   .then((response: any)=>{
     this.slotNoRegNo = true;
     this.regNoColor = false;
@@ -101,10 +89,7 @@ showSlotOfCarOfRegNo() {
     this.parkingTime = data.parkingTime;
     this.slotNumber = data.slotNumber;
     this.floorNumber = data.floorNumber;
-
-
   });
-}
   }
 }
 getUsers() {
@@ -139,10 +124,8 @@ disable() {
 }
 
 disableUsers() {
-  let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-  this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
   
-  this.service2.disableUser(this.userCode, this.email, this.roleOfLoggedInUser).toPromise()
+  this.userService.disableUser(this.userCode, this.email, this.token).toPromise()
   .then((response: any)=>{
     let status = JSON.parse(response['_body']);
     if(status.success === true) {

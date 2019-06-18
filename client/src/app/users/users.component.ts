@@ -16,23 +16,19 @@ export class UsersComponent implements OnInit {
   roleOfLoggedInUser: any;
   role: boolean;
   users: [];
+  token: any;
   constructor( private service : users, private router : Router) { }
 
   ngOnInit() {
     this.role = false;
-    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    let roleOfLoggedInUser = token ? JSON.parse(token).role : null;
-    if(!token && roleOfLoggedInUser !== 'ADMIN') {
-      this.router.navigate(['/login']);
-    }
+    this.token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+    
     this.getUsers();
   }
 
   getUsers() {
-    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
     this.role = this.roleOfLoggedInUser ? true : false;
-    this.service.getUsers(this.roleOfLoggedInUser).toPromise()
+    this.service.getUsers(this.token).toPromise()
     .then((response: any)=>{
       const data = JSON.parse(response['_body']).data;
       return this.users = data.map(item=>{
