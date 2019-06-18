@@ -1,15 +1,25 @@
 'use strict';
 const _ = require('underscore');
+const authUtils = require('../../server/utils/122-auth-utils');
 
 module.exports = function(Cardetails) {
 
-    Cardetails.registerCar = function (registrationNo, color, makeOfCar, modelOfCar, appUserId, callback) {
+    Cardetails.registerCar = function (registrationNumber, color, makeOfCar, modelOfCar, token, callback) {
         const promise = new Promise(function (resolve, reject) {
+
+          // check for Authorization
+          let authData = authUtils.verifyToken(token).data;
+          if(!authUtils.isCustomer(authData)) {
+            return resolve({success: false, message: 'Unauthorized to access', data: 401})
+          }
+
+          let appUserId = authData.id;
+
           let carInformation, parkingInformation;
           color = color.toLowerCase();
           Cardetails.findOne({
             where: {
-              registrationNo: registrationNo,
+              registrationNumber: registrationNumber,
               isActive: true
             }
           })
@@ -18,7 +28,7 @@ module.exports = function(Cardetails) {
                   return resolve({success: false, message: 'car is already parked'});
               }
               return Cardetails.create({
-                registrationNo: registrationNo,
+                registrationNumber: registrationNumber,
                 color: color,
                 modelOfCar: modelOfCar,
                 makeOfCar: makeOfCar,
@@ -49,7 +59,7 @@ module.exports = function(Cardetails) {
                 return resolve({success: false, message: 'Some error occured in saving parking info in car details table'});
               }
               let ticketDetails = {
-                registrationNo: data.registrationNo,
+                registrationNumber: data.registrationNumber,
                 color: data.color,
                 modelOfCar: data.modelOfCar,
                 makeOfCar: data.makeOfCar,
@@ -74,11 +84,11 @@ module.exports = function(Cardetails) {
       Cardetails.remoteMethod('registerCar', {
         accepts: [
           {
-            arg: 'registrationNo',
+            arg: 'registrationNumber',
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
@@ -86,7 +96,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
@@ -94,7 +104,7 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
@@ -102,15 +112,15 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
-            arg: 'appUserId',
+            arg: 'token',
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           }
         ],
@@ -127,12 +137,21 @@ module.exports = function(Cardetails) {
       });
 
 
-      Cardetails.unparkCar = function (registrationNo, appUserId, callback) {
+      Cardetails.unparkCar = function (registrationNumber, token, callback) {
         const promise = new Promise(function (resolve, reject) {
+
+          // check for Authorization
+          let authData = authUtils.verifyToken(token).data;
+          if(!authUtils.isCustomer(authData)) {
+            return resolve({success: false, message: 'Unauthorized to access', data: 401})
+          }
+
+          let appUserId = authData.id;
+
           let carInformation, parkingInformation;
           Cardetails.findOne({
             where: {
-              registrationNo: registrationNo,
+              registrationNumber: registrationNumber,
               isActive: true
             }
           })
@@ -155,7 +174,7 @@ module.exports = function(Cardetails) {
                 .then(carData=>{
                   // console.log('car data', carData);
               let details = {
-                registrationNumber: carData.registrationNo,
+                registrationNumber: carData.registrationNumber,
                 parkingTime: carData.parkingTime,
                 unparkingTime: carData.unparkingTime,
                 slotNumber: parkingInformation.slotNumber,
@@ -179,19 +198,19 @@ module.exports = function(Cardetails) {
       Cardetails.remoteMethod('unparkCar', {
         accepts: [
           {
-            arg: 'registrationNo',
+            arg: 'registrationNumber',
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
-            arg: 'appUserId',
+            arg: 'token',
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           }
         ],
@@ -207,12 +226,14 @@ module.exports = function(Cardetails) {
         description: 'API to unpark car'
       });
 
-      Cardetails.fetchAllCarsOfAParticularColor = function (color, roleOfLoggedInUser, callback) {
+      Cardetails.fetchAllCarsOfAParticularColor = function (color, token, callback) {
         const promise = new Promise(function (resolve, reject) {
 
-          if(roleOfLoggedInUser !== 'ADMIN') {
-            return resolve({success: false, message: 'Not authorized'});
-          } 
+            // check for Authorization
+            let authData = authUtils.verifyToken(token).data;
+            if(!authUtils.isAdmin(authData)) {
+              return resolve({success: false, message: 'Unauthorized to access', data: 401})
+            }
 
           color = color.toLowerCase();
           let carInformation;
@@ -224,7 +245,7 @@ module.exports = function(Cardetails) {
             }
           })
             .then(function (carDetails) {
-              carInformation = _.pluck(carDetails, 'registrationNo');
+              carInformation = _.pluck(carDetails, 'registrationNumber');
               return resolve({success: true, message: 'Done', data: carInformation});
             })
             .catch(function (err) {
@@ -246,15 +267,15 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
-            arg: 'roleOfLoggedInUser',
+            arg: 'token',
             type: 'string',
             required: false,
             http: {
-              source: 'query'
+              source: 'form'
             }
           }
         ],
@@ -270,16 +291,19 @@ module.exports = function(Cardetails) {
         description: 'API to fetch all cars of a particular color'
       });
 
-      Cardetails.fetchSlotNumber = function (registrationNumber, roleOfLoggedInUser, callback) {
+      Cardetails.fetchSlotNumber = function (registrationNumber, token, callback) {
         const promise = new Promise(function (resolve, reject) {
-          if(roleOfLoggedInUser !== 'ADMIN') {
-            return resolve({success: false, message: 'Not authorized'});
-          } 
+
+          // check for Authorization
+          let authData = authUtils.verifyToken(token).data;
+          if(!authUtils.isAdmin(authData)) {
+            return resolve({success: false, message: 'Unauthorized to access', data: 401})
+          }
 
           let slotNumber, carDetails; 
             Cardetails.findOne({
               where: {
-                registrationNo: registrationNumber,
+                registrationNumber: registrationNumber,
                 isActive: true
               }
             })
@@ -294,7 +318,7 @@ module.exports = function(Cardetails) {
             })
             .then(parkingData => {
               let data = {
-                registrationNumber: carDetails.registrationNo,
+                registrationNumber: carDetails.registrationNumber,
                 parkingTime: carDetails.parkingTime,
                 slotNumber: parkingData.slotNumber,
                 floorNumber: parkingData.floorNumber
@@ -321,15 +345,15 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: false,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
-            arg: 'roleOfLoggedInUser',
+            arg: 'token',
             type: 'string',
             required: false,
             http: {
-              source: 'query'
+              source: 'form'
             }
           }
         ],
@@ -345,11 +369,14 @@ module.exports = function(Cardetails) {
         description: 'API to fetch all slot numbers of parked car'
       });
 
-      Cardetails.fetchSlotNumbersOfColor = function (color, roleOfLoggedInUser, callback) {
+      Cardetails.fetchSlotNumbersOfColor = function (color, token, callback) {
         const promise = new Promise(function (resolve, reject) {
-          if(roleOfLoggedInUser !== 'ADMIN') {
-            return resolve({success: false, message: 'Not authorized'});
-          } 
+          // check for Authorization
+          let authData = authUtils.verifyToken(token).data;
+          if(!authUtils.isAdmin(authData)) {
+            return resolve({success: false, message: 'Unauthorized to access', data: 401})
+          }
+
           color = color.toLowerCase();
 
           let slotNumber; 
@@ -393,15 +420,15 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: false,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
-            arg: 'roleOfLoggedInUser',
+            arg: 'token',
             type: 'string',
             required: false,
             http: {
-              source: 'query'
+              source: 'form'
             }
           }
         ],
@@ -417,13 +444,18 @@ module.exports = function(Cardetails) {
         description: 'API to fetch all slot numbers of parked car'
       });
 
-      Cardetails.carsParkedBy = function (registrationNumber, callback) {
+      Cardetails.carsParkedBy = function (registrationNumber, token, callback) {
         const promise = new Promise(function (resolve, reject) {
-
+            // check for Authorization
+            let authData = authUtils.verifyToken(token).data;
+            if(!authUtils.isCustomer(authData)) {
+              return resolve({success: false, message: 'Unauthorized to access', data: 401})
+            }
+  
           let slotNumber; 
           Cardetails.findOne({
             where: {
-              registrationNo: registrationNumber,
+              registrationNumber: registrationNumber,
               isActive: true
             }
           })
@@ -464,7 +496,7 @@ module.exports = function(Cardetails) {
               }
             let tempObj = {};
 
-              tempObj['registrationNumber'] = item.Cardetails ? item.Cardetails.registrationNo: null;
+              tempObj['registrationNumber'] = item.Cardetails ? item.Cardetails.registrationNumber: null;
               tempObj['color'] = item.Cardetails ? item.Cardetails.color : null;
               tempObj['slotNumber'] = item.slotNumber;
               tempObj['floorNumber'] = item.floorNumber;
@@ -492,7 +524,15 @@ module.exports = function(Cardetails) {
             type: 'string',
             required: false,
             http: {
-              source: 'query'
+              source: 'form'
+            }
+          },
+          {
+            arg: 'token',
+            type: 'string',
+            required: false,
+            http: {
+              source: 'form'
             }
           }
         ],

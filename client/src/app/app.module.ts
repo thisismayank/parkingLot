@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { HttpModule } from '@angular/http';
-// import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -14,8 +14,14 @@ import { register } from './createProduct/create.product.component';
 import { players_m } from './player.service';
 import { player_m } from './movie/movie.list.component';
 import { login } from './login/login.user.component';
+
 import { users } from './user.service';
 import { CarDetailsService } from './carDetails.service';
+import { AuthService } from './auth.service';
+import { AuthGuard } from './auth.guard';
+import { TokenInterceptorService } from './token-interceptor.service';
+
+
 import { UsersComponent } from './users/users.component';
 import { CarDetailsComponent } from './car-details/car-details.component';
 import { ShowCarsComponent } from './show-cars/show-cars.component';
@@ -43,6 +49,7 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
       { path: 'register', component: register },
@@ -52,19 +59,22 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
       { path: 'parkCar', component: CarDetailsComponent },
       // { path: 'ticket', component: ParkingTicketComponent }
       { path: 'showCar', component: ShowCarsComponent },
-      { path: 'admin', component: AdminDashboardComponent },
-      { path: 'userDashboard', component: UserDashboardComponent },
-
-
-
-
+      { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard] },
+      { path: 'userDashboard', component: UserDashboardComponent, canActivate: [AuthGuard] },
     ])
   ],
   providers: [
     Product2Service,
     players_m,
     users,
-    CarDetailsService
+    CarDetailsService,
+    AuthService,
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

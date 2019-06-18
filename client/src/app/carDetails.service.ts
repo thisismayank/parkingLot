@@ -10,50 +10,80 @@ export class CarDetailsService {
 
   constructor( private http: Http) { }
 
-  public parkCar(registrationNumber, color, makeOfCar, modelOfCar, appUserId) {
+  // car-details
+  public parkCar(registrationNumber, color, makeOfCar, modelOfCar, token) {
     const path = '/carDetails/registercar';
-    const query = `?registrationNo=${registrationNumber}&color=${color}&makeOfCar=${makeOfCar}&modelOfCar=${modelOfCar}&appUserId=${appUserId}`;
-    return this.http.post(this.baseUrl + path + query, '');
+    const body = {
+      registerationNumber: registrationNumber.toString(),
+      color: color.toString(),
+      makeOfCar: makeOfCar.toString(),
+      modelOfCar: modelOfCar.toString(),
+      token: token.toString()
+    }
+    return this.http.post(this.baseUrl + path, body);
   }
 
-  public listCars(appUserId) {
-    const path = '/parkingDetails/fetchcars';
-    const query = `?appUserId=${appUserId}`;
-    return this.http.post(this.baseUrl + path + query, '');
-  }
-
-  public listCarsOfAColor(color, roleOfLoggedInUser) {
+  public parkedNearBy(registrationNumber, token) {
+    const path = '/carDetails/carsparkedby';
+    const body = {
+      registerationNumber: registrationNumber.toString(),
+      token: token.toString()
+    }
+    return this.http.post(this.baseUrl + path, body);
+  } 
+  
+  public listCarsOfAColor(color, token) {
     const path = '/carDetails/fetchallcarsofaparticularcolor';
-    const query = `?color=${color}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
-    return this.http.post(this.baseUrl + path + query, '');
+
+    const body = {
+      color: color.toString(),
+      token: token.toString()
+    }
+    return this.http.post(this.baseUrl + path, body);
   }
   
-  public listSlotOfCar(registrationNumber, roleOfLoggedInUser) {
+  public listSlotOfCar(registrationNumber, token) {
     const path = '/carDetails/fetchslotnumber';
-    const query = `?registrationNumber=${registrationNumber}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
-    return this.http.post(this.baseUrl + path + query, '');
+    const body = {
+      registerationNumber: registrationNumber.toString(),
+      token: token.toString()
+    }
+    return this.http.post(this.baseUrl + path, body);
   }
 
-  public listSlotsOfCarsOfAColor(color, roleOfLoggedInUser) {
+  public listSlotsOfCarsOfAColor(color, token) {
     const path = '/carDetails/fetchslotnumbersofcolor';
-    const query = `?color=${color}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
-    return this.http.post(this.baseUrl + path + query, '');
+
+    const body = {
+      color: color.toString(),
+      token: token.toString()
+    }
+    return this.http.post(this.baseUrl + path, body);
   }
 
-  public unparkCar(registrationNumber, appUserId) {
+  public unparkCar(registrationNumber, token) {
     const path = '/carDetails/unparkcar';
-    const query = `?registrationNo=${registrationNumber}&appUserId=${appUserId}`;
-    return this.http.post(this.baseUrl + path + query, '');
+    const body = {
+      registerationNumber: registrationNumber.toString(),
+      token: token.toString()
+    }
+    return this.http.post(this.baseUrl + path, body);
   }
 
+  // floor-details
   public parkingGrid() {
     const path = '/floorDetails/stateofparkingspace';
     return this.http.get(this.baseUrl + path, '');
   }
 
-  public parkedNearBy(registrationNumber) {
-    const path = '/carDetails/carsparkedby';
-    const query = `?registrationNumber=${registrationNumber}`;
-    return this.http.post(this.baseUrl + path + query, '');
-  } 
+  // parking-details
+  public listCars(token) {
+    const path = '/parkingDetails/fetchcars';
+    const body = {
+      token: token.toString()
+    }
+    return this.http.post(this.baseUrl + path, body);
+  }
+
+
 }

@@ -62,7 +62,7 @@ export class CarDetailsComponent implements OnInit {
       this.park = true;
       this.unpark = false;
       this.selected = true;
-      this.registrationNumber = data.data.registrationNo;
+      this.registrationNumber = data.data.registrationNumber;
       this.color = data.data.color;
       this.modelOfCar = data.data.modelOfCar;
       this.slotNumber = data.data.slotNumber;

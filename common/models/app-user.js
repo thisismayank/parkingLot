@@ -1,11 +1,13 @@
 'use strict';
 
 const passwordUtils = require('../../server/utils/111-password-utils');
+const jwt = require('jsonwebtoken');
+const authUtils = require('../../server/utils/122-auth-utils');
 
 module.exports = function(Appuser) {
     Appuser.login = function (userCode, password, callback) {
         const promise = new Promise(function (resolve, reject) {
-
+      
           Appuser.findOne({
             where: {
               userCode: userCode
@@ -23,11 +25,18 @@ module.exports = function(Appuser) {
               });
             })
               .then((roleDetails)=>{
+                let payload;
                 if(roleDetails.roles().name === 'ADMIN') {
-                  return resolve({success: true, message: 'successfull', data: {role: 'ADMIN', id: roleDetails.appUserId} });
+                  payload = {role: 'ADMIN', appUserId: roleDetails.appUserId};
+
+                  // return resolve({success: true, message: 'successfull', data: {role: 'ADMIN', id: roleDetails.appUserId} });
                 } else {
-                  return resolve({ success: true, message: 'successfull', data: {role: 'CUSTOMER', id: roleDetails.appUserId} });
+                  payload = {role: 'CUSTOMER', appUserId: roleDetails.appUserId}
+                  // return resolve({ success: true, message: 'successfull', data: {role: 'CUSTOMER', id: roleDetails.appUserId} });
                 }
+                let token = jwt.sign(payload, 'secretKey');
+                return resolve({success: true, message: 'successfull', data: token });
+
             })
             .catch(function (err) {
               return reject(err);
@@ -48,7 +57,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
@@ -56,7 +65,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           }
         ],
@@ -72,8 +81,12 @@ module.exports = function(Appuser) {
         description: 'API to login'
       });
 
-      Appuser.register = function (firstName, lastName, userCode, email, password, dob, gender, role, roleOfLoggedInUser, callback) {
+      Appuser.register = function (firstName, lastName, userCode, email, password, dob, gender, role, token, callback) {
         const promise = new Promise(function (resolve, reject) {
+
+          // check for Authorization
+          let authData = authUtils.verifyToken(token).data;
+
           role = role.toUpperCase();
           let userData;
           Appuser.findOne({
@@ -88,7 +101,7 @@ module.exports = function(Appuser) {
               if(userData) {
                   return resolve({success: false, message: 'userCode exists'});
               }
-              if(roleOfLoggedInUser !== 'ADMIN' && role === 'ADMIN') {
+              if(!isAdmin(authData) && role === 'ADMIN') {
                 return resolve({success: false, message: 'Only admin can create an admin'});
               } 
               return Appuser.create({
@@ -146,7 +159,7 @@ module.exports = function(Appuser) {
                 type: 'string',
                 required: true,
                 http: {
-                  source: 'query'
+                  source: 'form'
                 }
               },
               {
@@ -154,7 +167,7 @@ module.exports = function(Appuser) {
                 type: 'string',
                 required: true,
                 http: {
-                  source: 'query'
+                  source: 'form'
                 }
               },
           {
@@ -162,7 +175,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
@@ -170,7 +183,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },  
           {
@@ -178,7 +191,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
@@ -186,7 +199,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
@@ -194,7 +207,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
@@ -202,15 +215,15 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
-            arg: 'roleOfLoggedInUser',
+            arg: 'token',
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
         ],
@@ -227,11 +240,15 @@ module.exports = function(Appuser) {
       });
 
 
-      Appuser.disableUser = function ( userCode, email, roleOfLoggedInUser, callback) {
+      Appuser.disableUser = function ( userCode, email, token, callback) {
         const promise = new Promise(function (resolve, reject) {
-          if(roleOfLoggedInUser !== 'ADMIN') {
-            return resolve({success: false, message: 'Only an admin user is authorized'});
-          }
+
+            // check for Authorization
+            let authData = authUtils.verifyToken(token).data;
+            if(!authUtils.isAdmin(authData)) {
+              return resolve({success: false, message: 'Unauthorized to access', data: 401})
+            }
+          
           let userData;
           Appuser.findOne({
             where: {
@@ -271,7 +288,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
@@ -279,15 +296,15 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },  
           {
-            arg: 'roleOfLoggedInUser',
+            arg: 'token',
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
         ],
@@ -303,11 +320,15 @@ module.exports = function(Appuser) {
         description: 'API to disable any user'
       });
 
-      Appuser.fetchAllUsers = function (roleOfLoggedInUser, callback) {
+      Appuser.fetchAllUsers = function (token, callback) {
         const promise = new Promise(function (resolve, reject) {
-          if(roleOfLoggedInUser !== 'ADMIN') {
-            return resolve({success: false, message: 'Only an admin user is authorized'});
+
+          // check for Authorization
+          let authData = authUtils.verifyToken(token).data;
+          if(!authUtils.isAdmin(authData)) {
+            return resolve({success: false, message: 'Unauthorized to access', data: 401})
           }
+          
           let userData;
           Appuser.find({
             where: {
@@ -336,11 +357,11 @@ module.exports = function(Appuser) {
       Appuser.remoteMethod('fetchAllUsers', {
         accepts: [
           {
-            arg: 'roleOfLoggedInUser',
+            arg: 'token',
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           }
         ],
@@ -391,7 +412,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           },
           {
@@ -399,7 +420,7 @@ module.exports = function(Appuser) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           }
         ],

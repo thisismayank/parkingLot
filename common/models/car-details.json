@@ -6,7 +6,7 @@
     "validateUpsert": true
   },
   "properties": {
-    "registrationNo": {
+    "registrationNumber": {
       "type": "string",
       "required": true
     },

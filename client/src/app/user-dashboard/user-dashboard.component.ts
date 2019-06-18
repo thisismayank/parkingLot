@@ -18,11 +18,11 @@ export class UserDashboardComponent implements OnInit {
   cars: any;
 
   ngOnInit() {
-    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    let roleOfLoggedInUser = token ? JSON.parse(token).role : null;
-    if(!token && roleOfLoggedInUser === 'ADMIN') {
-      this.router.navigate(['/login']);
-    }
+    // let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+    // let roleOfLoggedInUser = token ? JSON.parse(token).role : null;
+    // if(!token && roleOfLoggedInUser === 'ADMIN') {
+    //   this.router.navigate(['/login']);
+    // }
     this.parkedNearBy = false;
   }
 

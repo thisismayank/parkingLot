@@ -16,24 +16,25 @@ export class ShowCarsComponent implements OnInit {
   constructor(private service: CarDetailsService, private router: Router) { }
 
   ngOnInit() {
-    let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    if(!token) {
-      this.router.navigate(['/login']);
-    }
+    // let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+    // if(!token) {
+    //   this.router.navigate(['/login']);
+    // }
     this.showCars();
   }
 
   showCars() {
     let token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    this.appUserId = token ? JSON.parse(token).appUserId : null;
-    this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
+    // this.appUserId = token ? JSON.parse(token).appUserId : null;
+    // this.roleOfLoggedInUser = token ? JSON.parse(token).role : null;
 
-    if(this.roleOfLoggedInUser !== 'ADMIN') {
-        this.service.listCars(this.appUserId).toPromise()
+    // if(this.roleOfLoggedInUser !== 'ADMIN') {
+        // this.service.listCars(this.appUserId).toPromise()
+        this.service.listCars(token).toPromise()
         .then((response:any)=>{
           this.cars = JSON.parse(response['_body']).data;
         })
-    }
+    // }
 };
 
 onUnpark() {

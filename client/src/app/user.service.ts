@@ -14,35 +14,51 @@ export class users
         this.http = http;
     }
 
-    public getUsers(roleOfLoggedInUser)
+    public getUsers(token)
     {
-        const query = `/appUsers/fetchAllUsers?roleOfLoggedInUser=${roleOfLoggedInUser}`;
-        return this.http.get(this.baseUrl + query);
+        const path = `/appUsers/fetchAllUsers`;
+        const body = {
+            token: token.toString()
+        };
+        return this.http.get(this.baseUrl + path, body);
     }
 
-    public login(userCode, email, password)
+    public login(userCode, password)
     {
-        const query1 = `?userCode=${userCode}&password=${password}`;
-        const query = `/appUsers/login`;
-        const data = {
-            userCode: userCode,
-            password: password
-        }
-        console.log(this.baseUrl + query);
-        return this.http.post(this.baseUrl + query + query1, '');
+        const path = `/appUsers/login`;
+        const body = {
+            userCode: userCode.toStrin(),
+            password: password.toString()
+        };
+        return this.http.post(this.baseUrl + path, body);
     }
 
-    public register(firstName, lastName, userCode, email, password, dob, gender, role, roleOfLoggedInUser)
+    public register(firstName, lastName, userCode, email, password, dob, gender, role, token)
     {
         const path = `/appUsers/register`;
-        const query = `?firstName=${firstName}&lastName=${lastName}&userCode=${userCode}&email=${email}&password=${password}&dob=${dob}&gender=${gender}&role=${role}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
-        return this.http.post(this.baseUrl + path + query, '');
+        const body = {
+            firstName: firstName.toString(),
+            lastName: lastName.toString(),
+            userCode: userCode.toString(),
+            email: email.toString(),
+            password: password.toString(),
+            dob: dob.toString(),
+            gender: gender.toString(),
+            role: role.toString(),
+            roleOfLoggedInUser: token.toString()
+        }
+        
+        return this.http.post(this.baseUrl + path, body);
     }
 
-    public disableUser(userCode, email, roleOfLoggedInUser) {
+    public disableUser(userCode, email, token) {
         const path = '/appUsers/disableuser';
-        const query = `?userCode=${userCode}&email=${email}&roleOfLoggedInUser=${roleOfLoggedInUser}`;
-        return this.http.post(this.baseUrl + path + query, '');
+        const body = {
+            userCode: userCode.toString(),
+            email: email.toString(),
+            token: token.toString()
+        }
+        return this.http.post(this.baseUrl + path, body);
     }
     // public deletePlayer(id)
     // {

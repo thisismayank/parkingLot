@@ -1,6 +1,6 @@
 'use strict';
 const _ = require('underscore');
-
+const authUtils = require('../../server/utils/122-auth-utils');
 module.exports = function(Parkingdetails) {
 
     Parkingdetails.park = function (slotNumber, floorNumber, floorDetailId, carDetailId, appUserId, callback) {
@@ -80,9 +80,18 @@ module.exports = function(Parkingdetails) {
         }
       };
     
-      Parkingdetails.fetchCars = function (appUserId, callback) {
+      Parkingdetails.fetchCars = function (token, callback) {
         const promise = new Promise(function (resolve, reject) {
           let parkingInformation;
+
+          // check for Authorization
+          let authData = authUtils.verifyToken(token).data;
+          if(!authUtils.isCustomer(authData)) {
+            return resolve({success: false, message: 'Unauthorized to access', data: 401})
+          }
+
+          let appUserId = authData.appUserId;
+
           Parkingdetails.find({
             where: {
               appUserId: appUserId,
@@ -101,7 +110,7 @@ module.exports = function(Parkingdetails) {
                 let tempObj = {
                   slotNumber: cars.slotNumber,
                   floorNumber: cars.floorNumber,
-                  carRegistrationNumber: cars.carDetails() ? cars.carDetails().registrationNo : null,
+                  carRegistrationNumber: cars.carDetails() ? cars.carDetails().registrationNumber : null,
                   carColor: cars.carDetails() ? cars.carDetails().color: null,
                   carModel: cars.carDetails() ? cars.carDetails().modelOfCar: null
                 };
@@ -123,7 +132,7 @@ module.exports = function(Parkingdetails) {
       Parkingdetails.remoteMethod('fetchCars', {
         accepts: [
           {
-            arg: 'appUserId',
+            arg: 'token',
             type: 'string',
             required: true,
             http: {

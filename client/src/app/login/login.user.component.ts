@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { users } from '../user.service';
+import { AuthService } from '../auth.service';
 
 @Component({
     selector : 'login-mak',
@@ -26,7 +27,7 @@ export class login implements OnInit
             }
         }   
     }
-    constructor( service: users, private router: Router, private route : ActivatedRoute )
+    constructor( service: users, private authService: AuthService, private router: Router, private route : ActivatedRoute )
     {
         this.service = service;
     }
@@ -45,24 +46,31 @@ export class login implements OnInit
 
     onSave()
     {
-        this.service.login(this.userCode, this.email, this.password).toPromise()
+        // this.service.login(this.userCode, this.email, this.password).toPromise()
+        this.authService.login(this.userCode, this.password).toPromise()
         .then((response: any)=>{
-            let data = JSON.parse(response['_body']);
+            // let data = JSON.parse(response['_body']);
 
-            if(data.success === true) {
-                let token = {
-                    role: data.data.role,
-                    appUserId: data.data.id
-                };
-
-                localStorage.removeItem('token');
-                localStorage.setItem('token', JSON.stringify(token));
-                if(data.data.role === 'ADMIN') {
+            localStorage.setItem('token', response.data);
+            if(this.authService.loggedIn()) {
+                // this.router.navigate(['/userDashboard']);
                     this.router.navigate(['/admin']);
-                } else {
-                    this.router.navigate(['/userDashboard']);
-                }
-            } 
+
+            }
+            // if(data.success === true) {
+            //     let token = {
+            //         role: data.data.role,
+            //         appUserId: data.data.id
+            //     };
+
+            //     localStorage.removeItem('token');
+            //     localStorage.setItem('token', JSON.stringify(token));
+            //     if(data.data.role === 'ADMIN') {
+            //         this.router.navigate(['/admin']);
+            //     } else {
+            //         this.router.navigate(['/userDashboard']);
+            //     }
+            // } 
         });
     }
 
