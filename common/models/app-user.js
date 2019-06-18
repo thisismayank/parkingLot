@@ -377,11 +377,10 @@ module.exports = function(Appuser) {
         description: 'API to fetch all user data'
       });
 
-      Appuser.authorizeCustomer = function (authorize, callback) {
+      Appuser.authorizeCustomer = function (token, callback) {
         const promise = new Promise(function (resolve, reject) {
-          
           let authData = authUtils.verifyToken(token).data;
-          if(!authUtils.isAdmin(authData)) {
+          if(authUtils.isAdmin(authData)) {
             return resolve(false)
           }
 
@@ -408,7 +407,7 @@ module.exports = function(Appuser) {
         ],
         returns: {
           arg: 'data',
-          type: 'object',
+          type: 'boolean',
           root: true
         },
         http: {
@@ -419,11 +418,12 @@ module.exports = function(Appuser) {
       });
 
 
-Appuser.authorizeAdmin = function (authorize, callback) {
+Appuser.authorizeAdmin = function (token, callback) {
   const promise = new Promise(function (resolve, reject) {
     
     let authData = authUtils.verifyToken(token).data;
-    if(!authUtils.isCustomer(authData)) {
+
+    if(authUtils.isCustomer(authData)) {
       return resolve(false)
     }
 
@@ -450,7 +450,7 @@ Appuser.remoteMethod('authorizeAdmin', {
   ],
   returns: {
     arg: 'data',
-    type: 'object',
+    type: 'boolean',
     root: true
   },
   http: {

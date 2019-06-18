@@ -45,7 +45,7 @@
     
         </thead>
         <tr *ngFor="let x of cars; index as i">
-            <td>i + 1</td>
+            <td>{{i + 1}}</td>
             <td>{{x}} </td>
             <td>{{color}} </td>
         </tr>
@@ -79,7 +79,7 @@
             
                 </thead>
                 <tr *ngFor="let x of cars; index as i">
-                    <td>i + 1</td>
+                    <td>{{i + 1}}</td>
                     <td>{{x}} </td>
                     <td>{{color}} </td>
                 </tr>
@@ -97,7 +97,7 @@
                 
                     </thead>
                     <tr *ngFor="let x of cars; index as i">
-                        <td>i + 1</td>
+                        <td>{{i + 1}}</td>
                         <td>{{x.floorNumber}} </td>
                         <td>{{x.maxSlots}} </td>
                         <td>{{x.numberOfFilledSlots}}</td>

@@ -85,7 +85,9 @@ module.exports = function(Parkingdetails) {
           let parkingInformation;
 
           // check for Authorization
+          console.log(token);
           let authData = authUtils.verifyToken(token).data;
+          // console.log('here in fetchCars');
           if(!authUtils.isCustomer(authData)) {
             return resolve({success: false, message: 'Unauthorized to access', data: 401})
           }
@@ -106,6 +108,7 @@ module.exports = function(Parkingdetails) {
               if(!parkingData) {
                   return resolve({success: false, message: 'This car is not parked'});
               }
+              // console.log('parkingInformation', parkingInformation);
               let parkedCars = _.map(parkingInformation, (cars)=>{
                 let tempObj = {
                   slotNumber: cars.slotNumber,
@@ -136,7 +139,7 @@ module.exports = function(Parkingdetails) {
             type: 'string',
             required: true,
             http: {
-              source: 'query'
+              source: 'form'
             }
           }
         ],

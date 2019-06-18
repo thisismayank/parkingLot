@@ -17,7 +17,7 @@ export class login implements OnInit
 
     token: any;
     ngOnInit() {
-        this.token = localStorage.getItem('token') ? localStorage.getItem('token'): null;   
+        this.token = JSON.parse(localStorage.getItem('token'));   
     }
     constructor( service: users, private authService: AuthService, private router: Router, private route : ActivatedRoute )
     {
@@ -43,7 +43,7 @@ export class login implements OnInit
         .then((response: any)=>{
             let data = JSON.parse(response['_body']).data;
             localStorage.removeItem('token');
-            localStorage.setItem('token', JSON.stringify(data.data));
+            localStorage.setItem('token', JSON.stringify(data));
             // if(this.authService.loggedIn()) {
             //     // this.router.navigate(['/userDashboard']);
             //         this.router.navigate(['/admin']);
@@ -57,11 +57,18 @@ export class login implements OnInit
 
             //     localStorage.removeItem('token');
             //     localStorage.setItem('token', JSON.stringify(token));
-                if(data.data.role === 'ADMIN') {
+            this.service.authorizeAdmin(data).toPromise()
+            .then((response:any)=>{
+                if(JSON.parse(response['_body']) === true) {
                     this.router.navigate(['/admin']);
-                } else {
+                }
+            });
+            this.service.authorizeCustomer(data).toPromise()
+            .then((response:any)=>{
+                if(JSON.parse(response['_body']) == true) {
                     this.router.navigate(['/userDashboard']);
                 }
+            });
         });
     }
 

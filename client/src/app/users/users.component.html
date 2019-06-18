@@ -1,5 +1,5 @@
 <div id="usersId" *ngIf = "role">
-    <table class="table table-hover col-lg-10 users">
+    <table class="table table-hover col-lg-10 container">
         <thead>
             <th>id</th>
             <th>Name</th>
@@ -9,8 +9,8 @@
             <th>Delete</th>
     
         </thead>
-        <tr *ngFor="let x of users; let i = index">
-            <td>i + 1</td>
+        <tr *ngFor="let x of users; index as i">
+            <td>{{i + 1}}</td>
             <td>{{x.name}} </td>
             <td>{{x.email}} </td>
             <td>{{x.userCode}}</td>
@@ -19,4 +19,6 @@
     
         </tr>
     </table>
+<button class="btn btn-warning btnConfig" style="margin-left: 5px;" (click)="goBack()">Back</button>
+
     </div>

@@ -21,11 +21,17 @@ export class UserDashboardComponent implements OnInit {
   error: any;
 
   ngOnInit() {
-    this.token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    if(!this.userService.authorizeCustomer(this.token)) {
-      this.error = 'Un-authorized'
-      this.router.navigate(['/login']);
-    }
+    this.token =JSON.parse(localStorage.getItem('token'));
+    console.log('token in user-dashboard', this.token);
+    this.userService.authorizeCustomer(this.token).toPromise()
+            .then((response:any)=>{
+              console.log(response);
+                if(JSON.parse(response['_body']) === false) {
+                    this.error = 'Un-authorized'
+                    this.router.navigate(['/login']);
+                }
+            });
+
     // let roleOfLoggedInUser = token ? JSON.parse(token).role : null;
     // if(!token && roleOfLoggedInUser === 'ADMIN') {
     //   this.router.navigate(['/login']);

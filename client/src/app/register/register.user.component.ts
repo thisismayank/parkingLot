@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { players_m } from './../player.service';
 import { users } from '../user.service';
 
 @Component({
     selector : 'create-mak',
-    templateUrl : './create.product.component.html',
-    styleUrls : ['./create.product.component.css']
+    templateUrl : './register.user.component.html',
+    styleUrls : ['./register.user.component.css']
 })
 
 export class register implements OnInit
 {
     ngOnInit() {
-        this.token = localStorage.getItem('token') ? localStorage.getItem('token'): null;  
+        this.token = JSON.parse(localStorage.getItem('token'));  
     }
     token: any;
     firstName: any;

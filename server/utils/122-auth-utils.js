@@ -5,13 +5,13 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
     verifyToken: function(token) {
-        console.log('token in utils', token);
+        // console.log('token in utils', token);
     if(!token) {
       return {success:false}
     } 
 
     let payload = jwt.verify(token, 'secretKey');
-    console.log(payload);
+    // console.log(payload);
     if(!payload) {
       return {success: false, message: 'Not authorized', data: null};
     }
@@ -19,6 +19,7 @@ module.exports = {
   },
 
   isAdmin: function(data) {
+    //   console.log('isAdmin', data);
       if(data.role === 'ADMIN') {
           return true;
       } else {
@@ -27,6 +28,7 @@ module.exports = {
   },
 
   isCustomer: function(data) {
+    //   console.log('isCustomer', data);
     if(data.role === 'CUSTOMER') {
         return true;
     } else {

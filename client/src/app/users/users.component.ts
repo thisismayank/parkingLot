@@ -21,13 +21,13 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.role = false;
-    this.token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
-    
+    this.token = JSON.parse(localStorage.getItem('token'));
     this.getUsers();
   }
 
   getUsers() {
-    this.role = this.roleOfLoggedInUser ? true : false;
+    // this.role = this.roleOfLoggedInUser ? true : false;
+    this.role = true;
     this.service.getUsers(this.token).toPromise()
     .then((response: any)=>{
       const data = JSON.parse(response['_body']).data;
@@ -44,4 +44,8 @@ export class UsersComponent implements OnInit {
     .catch(err=> {return err;});
   }
 
+  
+goBack() {
+  return this.router.navigate(['/admin']);
+}
 };

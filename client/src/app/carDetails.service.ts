@@ -14,7 +14,7 @@ export class CarDetailsService {
   public parkCar(registrationNumber, color, makeOfCar, modelOfCar, token) {
     const path = '/carDetails/registercar';
     const body = {
-      registerationNumber: registrationNumber.toString(),
+      registrationNumber: registrationNumber.toString(),
       color: color.toString(),
       makeOfCar: makeOfCar.toString(),
       modelOfCar: modelOfCar.toString(),

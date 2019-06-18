@@ -1,3 +1,4 @@
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -7,19 +8,14 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { products_m } from './productList/product.list.component';
-import { product2_m } from './productList2/product2.list.component';
-import { Product2Service } from './product2.service';
-import { register } from './createProduct/create.product.component';
-import { players_m } from './player.service';
-import { player_m } from './movie/movie.list.component';
+import { register } from './register/register.user.component';
 import { login } from './login/login.user.component';
 
 import { users } from './user.service';
 import { CarDetailsService } from './carDetails.service';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
-import { TokenInterceptorService } from './token-interceptor.service';
+// import { AuthGuard } from './auth.guard';
+// import { TokenInterceptorService } from './token-interceptor.service';
 
 
 import { UsersComponent } from './users/users.component';
@@ -33,10 +29,7 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 @NgModule({
   declarations: [
     AppComponent,
-    products_m,
-    product2_m,
     register,
-    player_m,
     login,
     UsersComponent,
     CarDetailsComponent,
@@ -53,28 +46,19 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
     FormsModule,
     RouterModule.forRoot([
       { path: 'register', component: register },
-      { path: 'list', component: player_m },
       { path: 'login', component: login },
       { path: 'users', component: UsersComponent },
       { path: 'parkCar', component: CarDetailsComponent },
       // { path: 'ticket', component: ParkingTicketComponent }
       { path: 'showCar', component: ShowCarsComponent },
-      { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard] },
-      { path: 'userDashboard', component: UserDashboardComponent, canActivate: [AuthGuard] },
+      { path: 'admin', component: AdminDashboardComponent },
+      { path: 'userDashboard', component: UserDashboardComponent },
     ])
   ],
   providers: [
-    Product2Service,
-    players_m,
     users,
     CarDetailsService,
-    AuthService,
-    AuthGuard,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptorService,
-      multi: true
-    }
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

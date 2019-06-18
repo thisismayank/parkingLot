@@ -1,4 +1,3 @@
-import { players_m } from './player.service';
 import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 
@@ -27,7 +26,7 @@ export class users
     {
         const path = `/appUsers/login`;
         const body = {
-            userCode: userCode.toStrin(),
+            userCode: userCode.toString(),
             password: password.toString()
         };
         return this.http.post(this.baseUrl + path, body);
@@ -66,7 +65,12 @@ export class users
         const body = {
             token: token.toString()
         }
+        // return this.http.post(this.baseUrl + path, body);
         return this.http.post(this.baseUrl + path, body);
+        // .then((response: any)=>{
+        //     let data = JSON.parse(response['_body']).data;
+        //     return true;
+        // })
     }
 
     public authorizeAdmin(token) {
@@ -75,6 +79,10 @@ export class users
             token: token.toString()
         }
         return this.http.post(this.baseUrl + path, body);
+        // .then((response: any)=>{
+        //     let data = JSON.parse(response['_body']).data;
+        //     return true;
+        // })
     }
     // public deletePlayer(id)
     // {

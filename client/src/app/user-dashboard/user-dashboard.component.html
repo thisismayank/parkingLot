@@ -18,8 +18,8 @@
           <th>Floor#</th>
   
       </thead>
-      <tr *ngFor="let x of cars; let i = index">
-          <td>i + 1</td>
+      <tr *ngFor="let x of cars; index as i">
+          <td>{{i + 1}}</td>
           <td>{{x.registrationNumber}} </td>
           <td>{{x.color}} </td>
           <td>{{x.slotNumber}} </td>

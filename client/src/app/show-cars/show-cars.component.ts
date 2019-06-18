@@ -19,14 +19,23 @@ export class ShowCarsComponent implements OnInit {
   constructor(private service: CarDetailsService, private userService: users,private router: Router) { }
 
   ngOnInit() {
-    this.token = localStorage.getItem('token') ? localStorage.getItem('token'): null;
+    this.token = JSON.parse(localStorage.getItem('token'));
     // if(!token) {
     //   this.router.navigate(['/login']);
     // }
-    if(!this.userService.authorizeCustomer(this.token)) {
-      this.error = 'Un-authorized'
-      this.router.navigate(['/login']);
-    }
+
+    this.userService.authorizeCustomer(this.token).toPromise()
+            .then((response:any)=>{
+                if(JSON.parse(response['_body']) === false) {
+                    this.error = 'Un-authorized'
+                    this.router.navigate(['/login']);
+                }
+            });
+
+    // if(!this.userService.authorizeCustomer(this.token)) {
+    //   this.error = 'Un-authorized'
+    //   this.router.navigate(['/login']);
+    // }
     this.showCars();
   }
 
@@ -49,6 +58,6 @@ onUnpark() {
 }
 
 goBack() {
-  return this.router.navigate(['/login']);
+  return this.router.navigate(['/userDashboard']);
 }
 }

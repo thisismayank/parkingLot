@@ -32,11 +32,15 @@ export class AdminDashboardComponent implements OnInit {
   error: any;
   token: any;
   ngOnInit() {
-    this.token = localStorage.getItem('token');
-    if(!this.userService.authorizeAdmin(this.token)) {
-      this.error = 'Un-authorized'
-      this.router.navigate(['/login']);
-    }
+    this.token = JSON.parse(localStorage.getItem('token'));
+    this.userService.authorizeAdmin(this.token).toPromise()
+            .then((response:any)=>{
+                if(JSON.parse(response['_body']) === false) {
+                    this.error = 'Un-authorized'
+                    this.router.navigate(['/login']);
+                }
+            });
+
     this.color = null;
     this.registrationNumber = null;
     this.regNoColor = false;
